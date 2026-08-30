@@ -126,7 +126,7 @@ function renderStore(){ const g=document.getElementById('store-grid'); g.innerHT
       <span class="z-prod-badge">${p.badge}</span>
       <h3>${p.name}</h3>
       <p>${p.desc}</p>
-      <div class="z-prod-foot"><div class="z-prod-price"><strong>₹${p.price}</strong><span style="font-size:11px;background:#FEF3C7;padding:4px 8px;border-radius:999px;font-weight:700">250gm</span></div><div class="z-prod-actions"><button class="z-btn-cart" onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price})">Add to Cart</button><button class="z-btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}',${p.price})">Buy Now</button></div></div>
+      <div class="z-prod-foot"><div class="z-prod-price"><strong>₹${p.price}</strong><span style="font-size:11px;background:#FEF3C7;padding:4px 8px;border-radius:999px;font-weight:700">250gm</span></div><div class="z-prod-actions"><button class="z-btn-cart" onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price})">Add to Cart</button><button class="z-btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}',${p.price})">Buy Now</button></div><div class="z-quick-actions"><a href="tel:+917240975556" class="z-btn-call">📞 Call</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="z-btn-wa">💬 WhatsApp</a></div></div>
     </div>
   </div>`).join(''); }
 document.addEventListener('DOMContentLoaded', ()=>{ updBadge(); updateMobileCart(); renderStore(); });
