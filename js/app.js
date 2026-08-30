@@ -72,11 +72,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(dx > 80) closeDrawer();
   }, {passive:true});
 
-  // reveal on scroll
-  const obs = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in') });
-  },{threshold:.12});
-  document.querySelectorAll('.reveal').forEach(el=> obs.observe(el));
+  // reveal on scroll - Android safe fallback
+  try{
+    if('IntersectionObserver' in window){
+      const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in') });
+      },{threshold:.12});
+      document.querySelectorAll('.reveal').forEach(el=> obs.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach(el=> el.classList.add('in'));
+    }
+  }catch(e){
+    document.querySelectorAll('.reveal').forEach(el=> el.classList.add('in'));
+  }
 
   // whatsapp buttons (delegate for dynamically injected bar too)
   document.addEventListener('click', (e)=>{

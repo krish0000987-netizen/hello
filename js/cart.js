@@ -1,21 +1,30 @@
-// Zofed Foods - Central Cart Logic (works on all pages, mobile/desktop)
-window.zCart = JSON.parse(localStorage.getItem('zofed_cart')||'[]');
+// Zofed Foods - Central Cart Logic (Android/iOS safe)
+try{ window.zCart = JSON.parse(localStorage.getItem('zofed_cart')||'[]'); }catch(e){ window.zCart = []; }
+if(!Array.isArray(window.zCart)) window.zCart = [];
 function saveZCart(){ try{ localStorage.setItem('zofed_cart', JSON.stringify(window.zCart)); }catch(e){} }
 function toggleZCart(open){
   const d=document.getElementById('z-cart-drawer');
   if(!d) return;
   if(open){
-    d.classList.add('open'); renderZCart();
-    document.body.style.overflow='hidden';
-    document.documentElement.style.overflow='hidden';
-    // hide mobile bars while drawer open
+    d.classList.add('open');
+    try{ renderZCart(); }catch(e){ console.error(e); }
+    // Android: prevent background scroll but allow drawer scroll
+    try{
+      document.body.style.overflow='hidden';
+      document.documentElement.style.overflow='hidden';
+      // prevent touchmove on body, allow on drawer
+      document.body.style.touchAction='none';
+    }catch(e){}
     const mb=document.getElementById('z-mobile-cart'), ab=document.querySelector('.mobile-action-bar');
     if(mb) mb.style.display='none';
     if(ab) ab.style.display='none';
   } else {
     d.classList.remove('open');
-    document.body.style.overflow='';
-    document.documentElement.style.overflow='';
+    try{
+      document.body.style.overflow='';
+      document.documentElement.style.overflow='';
+      document.body.style.touchAction='';
+    }catch(e){}
     const mb=document.getElementById('z-mobile-cart'), ab=document.querySelector('.mobile-action-bar');
     if(mb) mb.style.display='';
     if(ab) ab.style.display='';
