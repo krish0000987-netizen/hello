@@ -34,7 +34,7 @@ function updateMobileCart(){
   if(tot) tot.textContent='₹'+total;
 }
 function renderZCart(){
-  const list=document.getElementById('z-cart-items'), subEl=document.getElementById('z-sub'), shipEl=document.getElementById('z-ship-fee'), totEl=document.getElementById('z-total'), fill=document.getElementById('z-ship-fill'), txt=document.getElementById('z-ship-text'), btn=document.getElementById('z-checkout'), form=document.getElementById('z-form-section');
+  const list=document.getElementById('z-cart-items'), subEl=document.getElementById('z-sub'), shipEl=document.getElementById('z-ship-fee'), totEl=document.getElementById('z-total'), fill=document.getElementById('z-ship-fill'), txt=document.getElementById('z-ship-text'), btn=document.getElementById('z-checkout'), buyBtn=document.getElementById('z-buy-now'), form=document.getElementById('z-form-section');
   if(!list) return;
   if(window.zCart.length===0){
     list.innerHTML='<p style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;font-style:italic">Your cart is empty — add a 250gm pack!</p>';
@@ -44,10 +44,12 @@ function renderZCart(){
     if(fill) fill.style.width='0%';
     if(txt) txt.innerHTML='<span style="color:var(--forest)">Add items worth ₹499 for FREE Delivery</span><span style="color:var(--terracotta)" id="z-ship-rem">₹499 left</span>';
     if(btn) btn.disabled=true;
+    if(buyBtn) buyBtn.disabled=true;
     if(form) form.style.display='none';
     return;
   }
   if(btn) btn.disabled=false;
+  if(buyBtn) buyBtn.disabled=false;
   if(form) form.style.display='grid';
   let html='', sub=0;
   window.zCart.forEach((p,i)=>{
@@ -75,12 +77,18 @@ function selectPay(el,val){
   if(el) el.classList.add('active');
   if(el) el.querySelector('input').checked=true;
   const b=document.getElementById('z-checkout');
-  if(b) b.textContent = val==='online' ? 'Pay Online via Razorpay →' : 'Proceed & Send Order to WhatsApp →';
+  if(b) b.textContent = val==='online' ? 'Pay Online via Razorpay →' : 'Proceed via WhatsApp →';
+  const buyB=document.getElementById('z-buy-now');
+  if(buyB) buyB.style.display = val==='online' ? 'none' : 'flex';
 }
 function handleCheckout(){
   const opt=document.querySelector('input[name="payOpt"]:checked')?.value || document.getElementById('z-pay')?.value || 'cod';
   if(opt==='online') initiatePayment('online');
   else checkoutZ();
+}
+function buyNowCart(){
+  if(window.zCart.length===0){ alert('Your cart is empty. Add a product first.'); return; }
+  initiatePayment('online');
 }
 function checkoutZ(){
   const nameEl=document.getElementById('z-name'), phoneEl=document.getElementById('z-phone'), addrEl=document.getElementById('z-address'), cityEl=document.getElementById('z-city'), pinEl=document.getElementById('z-pincode'), payEl=document.getElementById('z-pay');

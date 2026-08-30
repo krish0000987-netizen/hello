@@ -89,7 +89,9 @@
         <label class="z-pay-option" onclick="selectPay(this,'online')"><input type="radio" name="payOpt" value="online"> <span>💳 Pay Online - Razorpay / UPI</span></label>
         <div class="z-pay-note">Configure <code>js/payment.js</code> → <code>RAZORPAY_KEY</code> to enable live online payments.</div>
       </div>
-      <button id="z-checkout" disabled onclick="handleCheckout()" class="z-check">Proceed & Send Order to WhatsApp →</button>
+      <button id="z-buy-now" disabled onclick="buyNowCart()" class="z-btn-buy" style="width:100%;min-height:48px;justify-content:center;margin-bottom:8px;font-size:14px">⚡ Buy Now — Pay Online</button>
+      <button id="z-checkout" disabled onclick="handleCheckout()" class="z-check">Proceed via WhatsApp →</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><a href="tel:+917240975556" class="z-btn-call" style="justify-content:center">📞 Call to Order</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="z-btn-wa" style="justify-content:center">💬 WhatsApp</a></div>
     </div>
   </div>
 </div>
