@@ -105,7 +105,8 @@
 .z-drawer{ position:fixed; inset:0; z-index:70; display:none; }
 .z-drawer.open{ display:block; }
 .z-drawer-back{ position:absolute; inset:0; background:rgba(26,26,24,.45); backdrop-filter:blur(4px); }
-.z-drawer-panel{ position:absolute; top:0; right:0; width:min(420px,92vw); height:100%; height:100vh; height:100dvh; height:-webkit-fill-available; background:white; box-shadow:-20px 0 60px rgba(0,0,0,.2); display:flex; flex-direction:column; overflow:hidden; animation:zSlide .32s cubic-bezier(.22,1,.36,1); touch-action:pan-y; }
+:root{ --vh:1vh; }
+.z-drawer-panel{ position:absolute; top:0; right:0; width:min(420px,92vw); height:100%; height:100vh; height:calc(var(--vh, 1vh) * 100); height:100dvh; height:-webkit-fill-available; background:white; box-shadow:-20px 0 60px rgba(0,0,0,.2); display:flex; flex-direction:column; overflow:hidden; animation:zSlide .32s cubic-bezier(.22,1,.36,1); touch-action:pan-y; }
 @keyframes zSlide{ from{ transform:translateX(100%);} to{ transform:translateX(0);} }
 .z-drawer-head{ display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line-2); flex-shrink:0; }
 .z-ship{ background:var(--cream-2); border:1px solid var(--line-2); border-radius:12px; padding:12px; margin:14px 20px 0; flex-shrink:0; }
@@ -131,13 +132,14 @@
 .z-form{ padding:16px 20px 0; border-top:1px solid var(--line-2); display:grid; gap:10px; }
 .z-form h4{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--forest); }
 .z-form label{ font-size:11px; font-weight:700; color:#444; }
-.z-form input, .z-form select, .z-form textarea{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--cream); font-size:13px; outline:none; }
+.z-form input, .z-form select, .z-form textarea{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--cream); font-size:16px; outline:none; }
+@media(max-width:720px){ .z-form input, .z-form select, .z-form textarea{ font-size:16px; } }
 .z-form input:focus, .z-form select:focus, .z-form textarea:focus{ border-color:var(--forest); background:white; }
 
 /* — Recipe Modal — */
 .z-modal{ position:fixed; inset:0; z-index:72; display:none; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,.6); backdrop-filter:blur(6px); }
 .z-modal.open{ display:flex; }
-.z-modal-card{ background:white; border-radius:20px; max-width:720px; width:100%; max-height:92vh; overflow:auto; padding:20px; position:relative; box-shadow:0 24px 80px rgba(0,0,0,.25); }
+.z-modal-card{ background:white; border-radius:20px; max-width:720px; width:100%; max-height:92dvh; max-height:92vh; max-height:calc(var(--vh,1vh)*92); overflow:auto; -webkit-overflow-scrolling:touch; padding:20px; position:relative; box-shadow:0 24px 80px rgba(0,0,0,.25); }
 .z-modal-close{ position:absolute; top:12px; right:12px; width:36px; height:36px; border-radius:50%; border:1px solid var(--line); background:white; cursor:pointer; font-size:20px; display:grid; place-items:center; }
 .z-modal-img{ height:220px; border-radius:14px; overflow:hidden; background:#eee; margin-bottom:14px; }
 .z-modal-img img{ width:100%; height:100%; object-fit:cover; }
@@ -151,7 +153,7 @@
 .z-pay-note{ font-size:11px; color:var(--muted); background:var(--cream-2); padding:10px 12px; border-radius:10px; margin-top:8px; line-height:1.6; }
 
 /* — Sticky Mobile Cart Bar — */
-.z-mobile-cart{ display:none; position:fixed; bottom:0; left:0; right:0; z-index:48; background:white; border-top:1px solid var(--line); padding:10px 12px calc(10px + env(safe-area-inset-bottom)); box-shadow:0 -8px 30px rgba(0,0,0,.08); }
+.z-mobile-cart{ display:none; position:fixed; bottom:0; left:0; right:0; z-index:48; background:white; border-top:1px solid var(--line); padding:10px 12px calc(10px + env(safe-area-inset-bottom)); box-shadow:0 -8px 30px rgba(0,0,0,.08); padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px)); }
 .z-mobile-cart-inner{ display:flex; gap:10px; }
 .z-mobile-cart-info{ flex:1; }
 .z-mobile-cart-info b{ font-size:13px; color:var(--forest); }
@@ -169,6 +171,10 @@ body{ overscroll-behavior-y:contain; overflow-x:hidden; }
 img{ height:auto; max-width:100%; }
 *{ overflow-wrap:break-word; word-break:break-word; }
 
+/* — Android & iOS tap & scroll polish — */
+*{ -webkit-tap-highlight-color:transparent; }
+button, a{ touch-action:manipulation; }
+input, select, textarea{ touch-action:manipulation; }
 /* Responsive - Ecom Optimized */
 @media(max-width:1024px){ .z-prod-grid{ grid-template-columns:repeat(3,1fr);} .z-recipe-grid{ grid-template-columns:repeat(3,1fr);} .z-cat-bar{ top:64px; } }
 @media(max-width:720px){

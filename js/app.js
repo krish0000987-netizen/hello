@@ -281,4 +281,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
     btn.setAttribute('aria-expanded','false');
     btn.setAttribute('aria-controls','drawer');
   }
+
+  // Android & iOS viewport fix for 100vh/dvh
+  function setVH(){
+    try{ document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px'); }catch(e){}
+  }
+  setVH();
+  window.addEventListener('resize', setVH, {passive:true});
+  window.addEventListener('orientationchange', setVH, {passive:true});
+  // prevent double-tap zoom on Android, allow smooth scroll
+  document.addEventListener('touchstart', function(){}, {passive:true});
 });
