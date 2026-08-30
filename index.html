@@ -12,8 +12,8 @@
 <meta property="og:image" content="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80&auto=format&fit=crop">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' rx='12' fill='%239B1C1C'/%3E%3Ctext x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-weight='700' font-size='20' fill='white'%3EZ%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="css/style.css?v=036b886">
-<link rel="stylesheet" href="css/zofed-additions.css?v=036b886">
+<link rel="stylesheet" href="css/style.css?v=50recipes">
+<link rel="stylesheet" href="css/zofed-additions.css?v=50recipes">
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
@@ -426,9 +426,9 @@
   </div>
 </div>
 
-<script src="js/zofed-data.js?v=036b886"></script>
-<script src="js/cart.js?v=036b886"></script>
-<script src="js/payment.js?v=036b886"></script>
+<script src="js/zofed-data.js?v=50recipes"></script>
+<script src="js/cart.js?v=50recipes"></script>
+<script src="js/payment.js?v=50recipes"></script>
 <script>
 // Homepage previews only - cart logic in js/cart.js + js/payment.js
 function openProdModal(id){ const p=ZOFED_PRODUCTS.find(x=>x.id===id); if(!p) return; const c=document.getElementById('z-product-content'); if(c) c.innerHTML=`<div class="z-modal-img"><img src="${p.img}" alt="${p.name}"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="z-prod-badge">${p.badge} • ${p.weight}</span><span style="font-size:12px;color:#B45309;font-weight:800">★ ${p.rating} (${p.reviews})</span></div><h3 style="font-size:20px;color:var(--forest)">${p.name}</h3><p style="font-size:13px;color:var(--muted);margin-top:6px">${p.desc}</p><div style="background:var(--cream-2);border:1px solid var(--line-2);border-radius:12px;padding:12px;margin-top:12px"><b style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--forest)">Product Details</b><ul style="margin-top:8px;display:grid;gap:6px;font-size:12px;color:#444">${p.features.map(f=>`<li>✓ ${f}</li>`).join('')}<li>✓ Ingredients: ${p.ingredients}</li><li>✓ Shelf: ${p.shelfLife} • ${p.storage}</li></ul></div><div style="display:flex;gap:10px;align-items:center;margin-top:14px"><strong style="font-size:20px;color:var(--forest)">₹${p.price}</strong>${p.mrp>p.price?`<s style="color:var(--muted);font-size:13px">₹${p.mrp}</s><span style="background:#DCFCE7;color:#14532D;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:800">Save ₹${p.mrp-p.price}</span>`:''}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px"><button class="z-btn-cart" onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price}); closeProdModal();">Add to Cart</button><button class="z-btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}',${p.price}); closeProdModal();">Buy Now</button></div><div class="z-quick-actions"><a href="tel:+917240975556" class="z-btn-call">📞 Call</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="z-btn-wa">💬 WhatsApp</a></div>`; document.getElementById('z-product-modal').classList.add('open'); }
@@ -441,6 +441,6 @@ function openZRecipe(id){ const d=ZOFED_RECIPES.find(r=>r.id===id); if(!d) retur
 function closeZRecipe(){ document.getElementById('z-recipe-modal').classList.remove('open'); }
 document.addEventListener('DOMContentLoaded',()=>{ updBadge(); updateMobileCart(); renderHomeProducts(); renderHomeRecipes('all'); });
 </script>
-<script src="js/app.js?v=036b886"></script>
+<script src="js/app.js?v=50recipes"></script>
 </body>
 </html>
