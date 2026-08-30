@@ -72,6 +72,7 @@
   <div class="z-drawer-panel">
     <div class="z-drawer-head"><h3 style="font-size:18px;color:var(--forest)">🛒 Shopping Cart</h3><button onclick="toggleZCart(false)" style="width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:white;cursor:pointer">✕</button></div>
     <div class="z-ship"><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700" id="z-ship-text"><span style="color:var(--forest)">Add items worth ₹499 for FREE Delivery</span><span style="color:var(--terracotta)">₹499 left</span></div><div class="z-ship-bar"><div id="z-ship-fill" class="z-ship-fill" style="width:0%"></div></div></div>
+    <div class="z-drawer-body">
     <div id="z-cart-items" class="z-items"><p style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;font-style:italic">Your cart is empty...</p></div>
     <div id="z-form-section" class="z-form" style="display:none">
       <h4>📍 Dispatch & Delivery Coordinates</h4>
@@ -80,8 +81,9 @@
       <label>Complete Address *<textarea id="z-address" rows="2" placeholder="House/Flat No, Building, Landmark"></textarea></label>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label>City / State *<input id="z-city" value="Bhopal, MP"></label><label>Pincode *<input id="z-pincode" placeholder="462001"></label></div>
       <label>Payment Mode<select id="z-pay"><option>UPI / Online QR</option><option>Cash on Delivery (COD)</option></select></label>
+     </div>
     </div>
-    <div class="z-drawer-foot">
+     <div class="z-drawer-foot">
       <div class="z-sum"><div style="display:flex;justify-content:space-between"><span>Items Subtotal:</span><b id="z-sub">₹0</b></div><div style="display:flex;justify-content:space-between"><span>Delivery Charges:</span><b id="z-ship-fee">₹0</b></div><div class="total"><span>Total Payable:</span><span id="z-total">₹0</span></div></div>
       <div class="z-pay-gateway">
         <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--forest);margin-bottom:8px">Payment Gateway</div>
