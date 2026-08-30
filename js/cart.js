@@ -49,7 +49,7 @@ function renderZCart(){
     return;
   }
   if(btn) btn.disabled=false;
-  if(buyBtn) buyBtn.disabled=false;
+  if(buyBtn){ buyBtn.disabled=false; buyBtn.style.display='flex'; }
   if(form) form.style.display='grid';
   let html='', sub=0;
   window.zCart.forEach((p,i)=>{
@@ -71,6 +71,7 @@ function renderZCart(){
   }
   if(subEl) subEl.textContent='₹'+sub;
   if(totEl) totEl.textContent='₹'+(sub+fee);
+  if(buyBtn) buyBtn.textContent = `⚡ Buy Now — Pay ₹${sub+fee} Online`;
 }
 function selectPay(el,val){
   document.querySelectorAll('.z-pay-option').forEach(o=>o.classList.remove('active'));
@@ -78,8 +79,9 @@ function selectPay(el,val){
   if(el) el.querySelector('input').checked=true;
   const b=document.getElementById('z-checkout');
   if(b) b.textContent = val==='online' ? 'Pay Online via Razorpay →' : 'Proceed via WhatsApp →';
+  // keep Buy Now always visible after cart has items
   const buyB=document.getElementById('z-buy-now');
-  if(buyB) buyB.style.display = val==='online' ? 'none' : 'flex';
+  if(buyB){ buyB.style.display='flex'; buyB.disabled = window.zCart.length===0; }
 }
 function handleCheckout(){
   const opt=document.querySelector('input[name="payOpt"]:checked')?.value || document.getElementById('z-pay')?.value || 'cod';
