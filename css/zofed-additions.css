@@ -160,9 +160,11 @@
 .drawer.open ~ .z-mobile-cart,
 .drawer.open ~ .mobile-action-bar{ display:none !important; }
 
-/* — Smooth scrolling foundation — */
-html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
-body{ overscroll-behavior-y:contain; }
+/* — Smooth scrolling + mobile friendly foundation — */
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; -webkit-tap-highlight-color:transparent; }
+body{ overscroll-behavior-y:contain; overflow-x:hidden; }
+img{ height:auto; max-width:100%; }
+*{ overflow-wrap:break-word; word-break:break-word; }
 
 /* Responsive - Ecom Optimized */
 @media(max-width:1024px){ .z-prod-grid{ grid-template-columns:repeat(3,1fr);} .z-recipe-grid{ grid-template-columns:repeat(3,1fr);} .z-cat-bar{ top:64px; } }
@@ -190,12 +192,21 @@ body{ overscroll-behavior-y:contain; }
   .z-cat-bar{ top:64px; }
   .z-cat-inner{ padding:8px 0; gap:8px; -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; }
   .z-cat-pill{ padding:7px 12px; font-size:12px; min-height:36px; scroll-snap-align:start; }
-  .z-btn-cart, .z-btn-buy, .z-btn-call, .z-btn-wa{ min-height:44px; }
-  .z-qty button{ width:36px; height:36px; }
-  .z-item{ padding:10px; }
+  .z-btn-cart, .z-btn-buy{ min-height:48px; font-size:14px; }
+  .z-btn-call, .z-btn-wa{ min-height:48px; }
+  .z-qty button{ width:44px; height:44px; }
+  .z-item{ padding:12px; }
+  .z-drawer-head, .z-ship, .z-items, .z-form, .z-drawer-foot{ max-width:100%; }
 }
 @media(max-width:480px){
   .z-prod-grid{ grid-template-columns:1fr; }
   .z-recipe-grid{ grid-template-columns:1fr; }
   .z-drawer-foot{ max-height:42vh; }
+  .z-prod h3, .z-r-body h4{ font-size:15px; }
+}
+/* — Extra mobile polish 360px — */
+@media(max-width:360px){
+  .container{ width:100% !important; padding-inline:12px; }
+  .hero h1{ font-size:26px !important; }
+  .z-ship{ font-size:11px; }
 }
