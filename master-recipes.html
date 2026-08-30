@@ -7,6 +7,7 @@
 <meta name="description" content="Explore all 50 Zofed Foods master recipes — Paneer, Mutton, Chicken, Veg, Dal, Biryani & more. Every dish table-ready in 10-15 mins with 250gm base gravies.">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/zofed-additions.css">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' rx='12' fill='%239B1C1C'/%3E%3Ctext x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-weight='700' font-size='20' fill='white'%3EZ%3C/text%3E%3C/svg%3E">
 <style>
 .z-search{ max-width:520px; margin:0 auto 18px; display:flex; align-items:center; gap:10px; background:white; border:1px solid var(--line); border-radius:999px; padding:10px 14px; }
@@ -31,6 +32,7 @@
   </div>
 </header>
 <div class="drawer" id="drawer"><div class="drawer-backdrop"></div><div class="drawer-panel"><div class="drawer-head"><div class="brand"><div class="brand-mark">Z</div><div class="brand-text"><strong>Zofed Foods</strong><span>Ready to Cook</span></div></div><button id="drawerClose" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:white;cursor:pointer">✕</button></div><nav class="drawer-nav"><a href="index.html">Home <span>→</span></a><a href="store.html">Shop 250gm <span>→</span></a><a href="master-recipes.html" class="active">50 Recipe Hub <span>→</span></a><a href="products.html">Products <span>→</span></a><a href="recipes.html">Recipes <span>→</span></a><a href="contact.html">Contact <span>→</span></a></nav><div class="drawer-cta"><a href="tel:+917240975556" class="btn btn-primary">Call: 72409 75556</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="btn btn-whatsapp">WhatsApp Chat</a></div></div></div>
+<div class="z-cat-bar"><div class="container z-cat-inner"><a class="z-cat-pill" href="store.html">🛒 Shop 250gm</a><button class="z-cat-pill active" onclick="filterRecipes('all')">All 50</button><button class="z-cat-pill" onclick="filterRecipes('paneer')">Paneer</button><button class="z-cat-pill" onclick="filterRecipes('nonveg')">Non-Veg</button><button class="z-cat-pill" onclick="filterRecipes('veg')">Veg</button><button class="z-cat-pill" onclick="filterRecipes('biryani')">Biryani</button></div></div>
 
 <main>
 <section class="page-hero">
@@ -81,7 +83,13 @@
     </div>
     <div class="z-drawer-foot">
       <div class="z-sum"><div style="display:flex;justify-content:space-between"><span>Items Subtotal:</span><b id="z-sub">₹0</b></div><div style="display:flex;justify-content:space-between"><span>Delivery Charges:</span><b id="z-ship-fee">₹0</b></div><div class="total"><span>Total Payable:</span><span id="z-total">₹0</span></div></div>
-      <button id="z-checkout" disabled onclick="checkoutZ()" class="z-check">Proceed & Send Order to WhatsApp →</button>
+      <div class="z-pay-gateway">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--forest);margin-bottom:8px">Payment Gateway</div>
+        <label class="z-pay-option active" onclick="selectPay(this,'cod')"><input type="radio" name="payOpt" value="cod" checked> <span>💵 Cash on Delivery</span></label>
+        <label class="z-pay-option" onclick="selectPay(this,'online')"><input type="radio" name="payOpt" value="online"> <span>💳 Pay Online - Razorpay / UPI</span></label>
+        <div class="z-pay-note">Configure <code>js/payment.js</code> → <code>RAZORPAY_KEY</code> to enable live online payments.</div>
+      </div>
+      <button id="z-checkout" disabled onclick="handleCheckout()" class="z-check">Proceed & Send Order to WhatsApp →</button>
     </div>
   </div>
 </div>
@@ -93,14 +101,20 @@
     <div id="z-recipe-content"></div>
   </div>
 </div>
+<div class="z-mobile-cart" id="z-mobile-cart"><div class="z-mobile-cart-inner"><div class="z-mobile-cart-info"><b><span id="z-mobile-count">0</span> items</b> <span style="display:block">Total: <b id="z-mobile-total">₹0</b></span></div><button class="btn btn-ghost btn-sm" style="border:1px solid var(--forest)" onclick="toggleZCart(true)">View Cart</button><button class="btn btn-primary btn-sm" onclick="toggleZCart(true)">Checkout →</button></div></div>
 
 <script src="js/zofed-data.js"></script>
+<script src="js/payment.js"></script>
 <script src="js/app.js"></script>
 <script>
-let zCart=[], activeCat='all';
+let zCart=JSON.parse(localStorage.getItem('zofed_cart')||'[]'), activeCat='all';
+function saveZCart(){ localStorage.setItem('zofed_cart', JSON.stringify(zCart)); }
 function toggleZCart(o){ const d=document.getElementById('z-cart-drawer'); if(o){ d.classList.add('open'); renderZCart(); } else d.classList.remove('open'); }
-function updBadge(){ document.getElementById('cart-count').textContent=zCart.reduce((s,i)=>s+i.qty,0); }
-function updQty(idx,delta){ if(!zCart[idx]) return; zCart[idx].qty+=delta; if(zCart[idx].qty<=0) zCart.splice(idx,1); updBadge(); renderZCart(); }
+function updBadge(){ const c=document.getElementById('cart-count'); if(c) c.textContent=zCart.reduce((s,i)=>s+i.qty,0); }
+function updQty(idx,delta){ if(!zCart[idx]) return; zCart[idx].qty+=delta; if(zCart[idx].qty<=0) zCart.splice(idx,1); saveZCart(); updBadge(); updateMobileCart(); renderZCart(); }
+function selectPay(el,val){ document.querySelectorAll('.z-pay-option').forEach(o=>o.classList.remove('active')); el.classList.add('active'); el.querySelector('input').checked=true; const b=document.getElementById('z-checkout'); if(b) b.textContent = val==='online' ? 'Pay Online via Razorpay →' : 'Proceed & Send Order to WhatsApp →'; }
+function handleCheckout(){ const opt=document.querySelector('input[name="payOpt"]:checked')?.value || 'cod'; if(opt==='online') initiatePayment('online'); else checkoutZ(); }
+function updateMobileCart(){ const el=document.getElementById('z-mobile-count'), tot=document.getElementById('z-mobile-total'); const s=zCart.reduce((a,b)=>a+b.qty,0); const t=zCart.reduce((a,b)=>a+b.price*b.qty,0); if(el) el.textContent=s; if(tot) tot.textContent='₹'+(t>=499||t===0?t:t+50); }
 function renderZCart(){
   const list=document.getElementById('z-cart-items'), subEl=document.getElementById('z-sub'), shipEl=document.getElementById('z-ship-fee'), totEl=document.getElementById('z-total'), fill=document.getElementById('z-ship-fill'), txt=document.getElementById('z-ship-text'), btn=document.getElementById('z-checkout'), form=document.getElementById('z-form-section');
   if(zCart.length===0){ list.innerHTML='<p style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;font-style:italic">Your cart is empty...</p>'; subEl.textContent='₹0'; shipEl.textContent='₹0'; totEl.textContent='₹0'; fill.style.width='0%'; txt.innerHTML='<span style="color:var(--forest)">Add items worth ₹499 for FREE Delivery</span><span style="color:var(--terracotta)">₹499 left</span>'; btn.disabled=true; form.style.display='none'; return; }
@@ -128,16 +142,21 @@ function renderRecipes(){
   if(q) list=list.filter(r=> (r.title+r.desc+r.tag).toLowerCase().includes(q));
   if(list.length===0){ grid.innerHTML=''; noEl.style.display='block'; return; }
   noEl.style.display='none';
-  grid.innerHTML=list.map(r=>`<div onclick="openZRecipe(${r.id})" class="z-r-card"><div class="z-r-img"><img src="${r.img}" alt="${r.title}" loading="lazy"><span class="z-r-tag">Recipe #${r.id<10?'0'+r.id:r.id}</span></div><div class="z-r-body"><h4>${r.title}</h4><p>${r.desc}</p></div><div class="z-r-foot"><span>View Recipe →</span><span>⏱ ${r.time}</span></div></div>`).join('');
+  grid.innerHTML=list.map(r=>`<div class="z-r-card"><div class="z-r-img" onclick="openZRecipe(${r.id})" style="cursor:pointer"><img src="${r.img}" alt="${r.title}" loading="lazy"><span class="z-r-tag">Recipe #${r.id<10?'0'+r.id:r.id}</span></div><div class="z-r-body" onclick="openZRecipe(${r.id})" style="cursor:pointer"><h4>${r.title}</h4><p>${r.desc}</p></div><div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px 12px;gap:6px"><span style="font-size:10px;color:var(--muted);font-weight:700">⏱ ${r.time}</span><div style="display:flex;gap:6px"><button class="z-btn-cart" style="padding:6px 10px;font-size:11px" onclick="event.stopPropagation(); addToZCart('Zofed Master Base Gravies',199)">Add Base</button><button class="z-btn-buy" style="padding:6px 10px;font-size:11px" onclick="event.stopPropagation(); buyNow('Zofed Master Base Gravies',199)">Buy Now</button></div></div></div>`).join('');
 }
 function filterRecipes(cat){ activeCat=cat; document.querySelectorAll('#recipe-filters .z-filter').forEach(b=> b.classList.toggle('active', b.dataset.cat===cat)); renderRecipes(); }
-function openZRecipe(id){ const d=ZOFED_RECIPES.find(r=>r.id===id); if(!d) return; document.getElementById('z-recipe-content').innerHTML=`<div class="z-modal-img"><img src="${d.img}" alt="${d.title}"></div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:700"><span>⏱ ${d.time}</span><span>👥 ${d.servings}</span></div><h3 style="font-size:22px;color:var(--forest);margin-top:6px">${d.title}</h3><p style="font-size:12px;color:var(--terracotta);font-weight:600">${d.tag}</p><p style="font-size:13px;color:var(--muted);margin-top:4px">${d.desc}</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line-2)"><div><h5 style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);background:rgba(45,79,56,.06);padding:6px 8px;border-radius:6px;display:inline-block">📋 Ingredients</h5><ul style="margin-top:10px;display:grid;gap:6px;font-size:12.5px;color:var(--muted)">${d.ingredients.map(i=>`<li>• ${i}</li>`).join('')}</ul></div><div><h5 style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);background:rgba(45,79,56,.06);padding:6px 8px;border-radius:6px;display:inline-block">🍳 Steps</h5><ol style="margin-top:10px;display:grid;gap:8px;font-size:12.5px;color:#333;line-height:1.6">${d.steps.map((s,i)=>`<li><b>${i+1}.</b> ${s}</li>`).join('')}</ol></div></div><div class="z-tip"><b>💡 CHEF'S TIP:</b> ${d.tip}</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line-2)"><span style="font-size:12px;color:var(--muted)">Requires: <b>250g Master Base</b></span><a href="store.html" class="btn btn-primary btn-sm">Order Base Pack →</a></div>`; document.getElementById('z-recipe-modal').classList.add('open'); }
+function openZRecipe(id){ const d=ZOFED_RECIPES.find(r=>r.id===id); if(!d) return; document.getElementById('z-recipe-content').innerHTML=`<div class="z-modal-img"><img src="${d.img}" alt="${d.title}"></div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:700"><span>⏱ ${d.time}</span><span>👥 ${d.servings}</span></div><h3 style="font-size:22px;color:var(--forest);margin-top:6px">${d.title}</h3><p style="font-size:12px;color:var(--terracotta);font-weight:600">${d.tag}</p><p style="font-size:13px;color:var(--muted);margin-top:4px">${d.desc}</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line-2)"><div><h5 style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);background:rgba(45,79,56,.06);padding:6px 8px;border-radius:6px;display:inline-block">📋 Ingredients</h5><ul style="margin-top:10px;display:grid;gap:6px;font-size:12.5px;color:var(--muted)">${d.ingredients.map(i=>`<li>• ${i}</li>`).join('')}</ul></div><div><h5 style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);background:rgba(45,79,56,.06);padding:6px 8px;border-radius:6px;display:inline-block">🍳 Steps</h5><ol style="margin-top:10px;display:grid;gap:8px;font-size:12.5px;color:#333;line-height:1.6">${d.steps.map((s,i)=>`<li><b>${i+1}.</b> ${s}</li>`).join('')}</ol></div></div><div class="z-tip"><b>💡 CHEF'S TIP:</b> ${d.tip}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--line-2);justify-content:space-between;align-items:center"><span style="font-size:12px;color:var(--muted)">Requires: <b>250g Master Base</b></span><div style="display:flex;gap:8px"><button class="z-btn-cart" onclick="addToZCart('Zofed Master Base Gravies',199); closeZRecipe(); toggleZCart(true)">Add Base to Cart</button><button class="z-btn-buy" onclick="buyNow('Zofed Master Base Gravies',199); closeZRecipe()">Buy Base Now</button></div></div>`; document.getElementById('z-recipe-modal').classList.add('open'); }
 function closeZRecipe(){ document.getElementById('z-recipe-modal').classList.remove('open'); }
 document.addEventListener('DOMContentLoaded', ()=>{
-  renderRecipes();
+  updBadge(); updateMobileCart(); renderRecipes();
   const inp=document.getElementById('recipeSearch'), clr=document.getElementById('clearSearch');
-  inp.addEventListener('input', ()=>{ clr.style.display= inp.value ? 'grid' : 'none'; renderRecipes(); });
-  clr.addEventListener('click', ()=>{ inp.value=''; clr.style.display='none'; renderRecipes(); inp.focus(); });
+  if(inp) inp.addEventListener('input', ()=>{ clr.style.display= inp.value ? 'grid' : 'none'; renderRecipes(); });
+  if(clr) clr.addEventListener('click', ()=>{ inp.value=''; clr.style.display='none'; renderRecipes(); inp.focus(); });
+  // Fix header visibility: ensure header is not hidden behind announce
+  document.querySelectorAll('.z-cat-pill').forEach(p=> p.addEventListener('click', ()=> {
+    document.querySelectorAll('.z-cat-pill').forEach(x=> x.classList.remove('active'));
+    p.classList.add('active');
+  }));
 });
 </script>
 </body>

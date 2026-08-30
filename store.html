@@ -7,6 +7,7 @@
 <meta name="description" content="Shop Zofed Foods 250gm premium base gravies — Master Base, Pav Bhaji, Biryani, White Gravy, Mutton Stew & Nahari. Free delivery above ₹499. Order via WhatsApp.">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/zofed-additions.css">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' rx='12' fill='%239B1C1C'/%3E%3Ctext x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-weight='700' font-size='20' fill='white'%3EZ%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -27,6 +28,7 @@
   </div>
 </header>
 <div class="drawer" id="drawer"><div class="drawer-backdrop"></div><div class="drawer-panel"><div class="drawer-head"><div class="brand"><div class="brand-mark">Z</div><div class="brand-text"><strong>Zofed Foods</strong><span>Ready to Cook</span></div></div><button id="drawerClose" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:white;cursor:pointer">✕</button></div><nav class="drawer-nav"><a href="index.html">Home <span>→</span></a><a href="store.html" class="active">Shop 250gm <span>→</span></a><a href="master-recipes.html">50 Recipe Hub <span>→</span></a><a href="products.html">Products <span>→</span></a><a href="recipes.html">Recipes <span>→</span></a><a href="contact.html">Contact <span>→</span></a></nav><div class="drawer-cta"><a href="tel:+917240975556" class="btn btn-primary">Call: 72409 75556</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="btn btn-whatsapp">WhatsApp Chat</a></div></div></div>
+<div class="z-cat-bar"><div class="container z-cat-inner"><a class="z-cat-pill active" href="store.html">🛒 All 250gm</a><a class="z-cat-pill" href="master-recipes.html">🍛 50 Recipes</a><a class="z-cat-pill" href="store.html">Master Base</a><a class="z-cat-pill" href="store.html">Biryani Base</a><a class="z-cat-pill" href="store.html">White Gravy</a><a class="z-cat-pill" href="store.html">Mutton Range</a><span style="margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap">📦 FSSAI 11426045000358</span></div></div>
 
 <main>
 <section class="page-hero">
@@ -70,21 +72,34 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label>City / State *<input id="z-city" value="Bhopal, MP"></label><label>Pincode *<input id="z-pincode" placeholder="462001"></label></div>
       <label>Payment Mode<select id="z-pay"><option>UPI / Online QR</option><option>Cash on Delivery (COD)</option></select></label>
     </div>
-    <div class="z-drawer-foot">
+     <div class="z-drawer-foot">
       <div class="z-sum"><div style="display:flex;justify-content:space-between"><span>Items Subtotal:</span><b id="z-sub">₹0</b></div><div style="display:flex;justify-content:space-between"><span>Delivery Charges:</span><b id="z-ship-fee">₹0</b></div><div class="total"><span>Total Payable:</span><span id="z-total">₹0</span></div></div>
-      <button id="z-checkout" disabled onclick="checkoutZ()" class="z-check">Proceed & Send Order to WhatsApp →</button>
+      <div class="z-pay-gateway">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--forest);margin-bottom:8px">Payment Gateway</div>
+        <label class="z-pay-option active" onclick="selectPay(this,'cod')"><input type="radio" name="payOpt" value="cod" checked> <span>💵 Cash on Delivery</span></label>
+        <label class="z-pay-option" onclick="selectPay(this,'online')"><input type="radio" name="payOpt" value="online"> <span>💳 Pay Online - Razorpay / UPI</span></label>
+        <div class="z-pay-note">Set <code>RAZORPAY_KEY</code> in <code>js/payment.js</code> to enable live Razorpay. Falls back to WhatsApp if not set.</div>
+      </div>
+      <button id="z-checkout" disabled onclick="handleCheckout()" class="z-check">Proceed & Send Order to WhatsApp →</button>
     </div>
   </div>
 </div>
+<!-- Sticky Mobile Cart -->
+<div class="z-mobile-cart" id="z-mobile-cart"><div class="z-mobile-cart-inner"><div class="z-mobile-cart-info"><b><span id="z-mobile-count">0</span> items</b> <span style="display:block">Total: <b id="z-mobile-total">₹0</b> • Free ship &gt;₹499</span></div><button class="btn btn-ghost btn-sm" style="border:1px solid var(--forest)" onclick="toggleZCart(true)">View Cart</button><button class="btn btn-primary btn-sm" onclick="toggleZCart(true)">Checkout →</button></div></div>
 
 <script src="js/zofed-data.js"></script>
+<script src="js/payment.js"></script>
 <script src="js/app.js"></script>
 <script>
-let zCart=[];
+let zCart=JSON.parse(localStorage.getItem('zofed_cart')||'[]');
+function saveZCart(){ localStorage.setItem('zofed_cart', JSON.stringify(zCart)); }
 function toggleZCart(o){ const d=document.getElementById('z-cart-drawer'); if(o){ d.classList.add('open'); renderZCart(); } else d.classList.remove('open'); }
-function addToZCart(name,price){ const ex=zCart.find(i=>i.name===name); if(ex) ex.qty++; else zCart.push({name,price,qty:1}); updBadge(); toggleZCart(true); }
-function updBadge(){ document.getElementById('cart-count').textContent=zCart.reduce((s,i)=>s+i.qty,0); }
-function updQty(idx,delta){ if(!zCart[idx]) return; zCart[idx].qty+=delta; if(zCart[idx].qty<=0) zCart.splice(idx,1); updBadge(); renderZCart(); }
+function addToZCart(name,price){ const ex=zCart.find(i=>i.name===name); if(ex) ex.qty++; else zCart.push({name,price,qty:1}); saveZCart(); updBadge(); updateMobileCart(); toggleZCart(true); }
+function updBadge(){ const c=document.getElementById('cart-count'); if(c) c.textContent=zCart.reduce((s,i)=>s+i.qty,0); }
+function updQty(idx,delta){ if(!zCart[idx]) return; zCart[idx].qty+=delta; if(zCart[idx].qty<=0) zCart.splice(idx,1); saveZCart(); updBadge(); updateMobileCart(); renderZCart(); }
+function selectPay(el,val){ document.querySelectorAll('.z-pay-option').forEach(o=>o.classList.remove('active')); el.classList.add('active'); el.querySelector('input').checked=true; const b=document.getElementById('z-checkout'); if(b) b.textContent = val==='online' ? 'Pay Online via Razorpay →' : 'Proceed & Send Order to WhatsApp →'; }
+function handleCheckout(){ const opt=document.querySelector('input[name="payOpt"]:checked')?.value || 'cod'; if(opt==='online') initiatePayment('online'); else checkoutZ(); }
+function updateMobileCart(){ const el=document.getElementById('z-mobile-count'), tot=document.getElementById('z-mobile-total'); const s=zCart.reduce((a,b)=>a+b.qty,0); const t=zCart.reduce((a,b)=>a+b.price*b.qty,0); if(el) el.textContent=s; if(tot) tot.textContent='₹'+(t>=499||t===0?t:t+50); }
 function renderZCart(){
   const list=document.getElementById('z-cart-items'), subEl=document.getElementById('z-sub'), shipEl=document.getElementById('z-ship-fee'), totEl=document.getElementById('z-total'), fill=document.getElementById('z-ship-fill'), txt=document.getElementById('z-ship-text'), btn=document.getElementById('z-checkout'), form=document.getElementById('z-form-section');
   if(zCart.length===0){ list.innerHTML='<p style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;font-style:italic">Your cart is empty — add a 250gm pack!</p>'; subEl.textContent='₹0'; shipEl.textContent='₹0'; totEl.textContent='₹0'; fill.style.width='0%'; txt.innerHTML='<span style="color:var(--forest)">Add items worth ₹499 for FREE Delivery</span><span style="color:var(--terracotta)" id="z-ship-rem">₹499 left</span>'; btn.disabled=true; form.style.display='none'; return; }
@@ -106,15 +121,15 @@ function checkoutZ(){
 }
 function renderStore(){ const g=document.getElementById('store-grid'); g.innerHTML=ZOFED_PRODUCTS.map(p=>`
   <div class="z-prod" style="padding:0;overflow:hidden">
-    <div style="height:170px;overflow:hidden;background:#f3ede3"><img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover"></div>
+    <div style="height:170px;overflow:hidden;background:#f3ede3"><img src="${p.img}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover"></div>
     <div style="padding:16px;display:flex;flex-direction:column;flex:1">
       <span class="z-prod-badge">${p.badge}</span>
       <h3>${p.name}</h3>
       <p>${p.desc}</p>
-      <div class="z-prod-foot"><strong>₹${p.price}</strong><button onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price})">Add To Cart</button></div>
+      <div class="z-prod-foot"><div class="z-prod-price"><strong>₹${p.price}</strong><span style="font-size:11px;background:#FEF3C7;padding:4px 8px;border-radius:999px;font-weight:700">250gm</span></div><div class="z-prod-actions"><button class="z-btn-cart" onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price})">Add to Cart</button><button class="z-btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}',${p.price})">Buy Now</button></div></div>
     </div>
   </div>`).join(''); }
-document.addEventListener('DOMContentLoaded', renderStore);
+document.addEventListener('DOMContentLoaded', ()=>{ updBadge(); updateMobileCart(); renderStore(); });
 </script>
 </body>
 </html>

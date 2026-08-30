@@ -14,6 +14,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' rx='12' fill='%239B1C1C'/%3E%3Ctext x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-weight='700' font-size='20' fill='white'%3EZ%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/zofed-additions.css">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 <div class="zofed-announce">
@@ -71,6 +72,7 @@
     </div>
   </div>
 </div>
+<div class="z-cat-bar"><div class="container z-cat-inner"><a class="z-cat-pill" href="store.html">🛒 Shop 250gm</a><a class="z-cat-pill" href="master-recipes.html">🍛 50 Recipes</a><a class="z-cat-pill" href="#shop-preview">Master Base ₹199</a><a class="z-cat-pill" href="#shop-preview">Biryani Base</a><a class="z-cat-pill" href="#recipe-hub-preview">Veg & Paneer</a><span style="margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap">⚡ Ready in 10-15 min</span></div></div>
 
 <main>
 <!-- HERO -->
@@ -387,13 +389,19 @@
         <label>Payment Mode<select id="z-pay"><option>UPI / Online QR</option><option>Cash on Delivery (COD)</option></select></label>
       </div>
     </div>
-    <div class="z-drawer-foot">
+     <div class="z-drawer-foot">
       <div class="z-sum">
         <div style="display:flex;justify-content:space-between"><span>Items Subtotal:</span><b id="z-sub">₹0</b></div>
         <div style="display:flex;justify-content:space-between"><span>Delivery Charges:</span><b id="z-ship-fee">₹0</b></div>
         <div class="total"><span>Total Payable:</span><span id="z-total">₹0</span></div>
       </div>
-      <button id="z-checkout" disabled onclick="checkoutZ()" class="z-check">Proceed & Send Order to WhatsApp →</button>
+      <div class="z-pay-gateway">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--forest);margin-bottom:8px">Payment Gateway</div>
+        <label class="z-pay-option active" onclick="selectPay(this,'cod')"><input type="radio" name="payOpt" value="cod" checked> <span>💵 Cash on Delivery (COD)</span></label>
+        <label class="z-pay-option" onclick="selectPay(this,'online')"><input type="radio" name="payOpt" value="online"> <span>💳 Pay Online - Razorpay / UPI / Cards</span></label>
+        <div class="z-pay-note">To enable live payments: set key in <code>js/payment.js</code> → <code>RAZORPAY_KEY</code>. Without key, online pay falls back to WhatsApp + UPI QR.</div>
+      </div>
+      <button id="z-checkout" disabled onclick="handleCheckout()" class="z-check">Proceed & Send Order to WhatsApp →</button>
     </div>
   </div>
 </div>
@@ -404,15 +412,28 @@
     <div id="z-recipe-content"></div>
   </div>
 </div>
+<!-- Sticky Mobile Ecom Cart Bar -->
+<div class="z-mobile-cart" id="z-mobile-cart">
+  <div class="z-mobile-cart-inner">
+    <div class="z-mobile-cart-info"><b><span id="z-mobile-count">0</span> items</b> <span style="display:block">Total: <b id="z-mobile-total">₹0</b> • Free delivery &gt;₹499</span></div>
+    <button class="btn btn-ghost btn-sm" style="border:1px solid var(--forest)" onclick="toggleZCart(true)">View Cart</button>
+    <button class="btn btn-primary btn-sm" onclick="toggleZCart(true)">Checkout →</button>
+  </div>
+</div>
 
 <script src="js/zofed-data.js"></script>
+<script src="js/payment.js"></script>
 <script>
 // Homepage Zofed logic (cart + home previews)
-let zCart=[];
+let zCart = JSON.parse(localStorage.getItem('zofed_cart')||'[]');
+function saveZCart(){ localStorage.setItem('zofed_cart', JSON.stringify(zCart)); }
 function toggleZCart(o){ const d=document.getElementById('z-cart-drawer'); if(o){ d.classList.add('open'); renderZCart(); } else d.classList.remove('open'); }
-function addToZCart(name,price){ const ex=zCart.find(i=>i.name===name); if(ex) ex.qty++; else zCart.push({name,price,qty:1}); updBadge(); toggleZCart(true); }
-function updBadge(){ document.getElementById('cart-count').textContent = zCart.reduce((s,i)=>s+i.qty,0); }
-function updQty(idx,delta){ if(!zCart[idx]) return; zCart[idx].qty+=delta; if(zCart[idx].qty<=0) zCart.splice(idx,1); updBadge(); renderZCart(); }
+function addToZCart(name,price){ const ex=zCart.find(i=>i.name===name); if(ex) ex.qty++; else zCart.push({name,price,qty:1}); saveZCart(); updBadge(); updateMobileCart(); toggleZCart(true); }
+function updBadge(){ const c=document.getElementById('cart-count'); if(c) c.textContent = zCart.reduce((s,i)=>s+i.qty,0); }
+function updQty(idx,delta){ if(!zCart[idx]) return; zCart[idx].qty+=delta; if(zCart[idx].qty<=0) zCart.splice(idx,1); saveZCart(); updBadge(); updateMobileCart(); renderZCart(); }
+function selectPay(el,val){ document.querySelectorAll('.z-pay-option').forEach(o=>o.classList.remove('active')); el.classList.add('active'); el.querySelector('input').checked=true; const b=document.getElementById('z-checkout'); if(b) b.textContent = val==='online' ? 'Pay Online via Razorpay →' : 'Proceed & Send Order to WhatsApp →'; }
+function handleCheckout(){ const opt=document.querySelector('input[name="payOpt"]:checked')?.value || document.getElementById('z-pay')?.value || 'cod'; if(opt==='online') initiatePayment('online'); else checkoutZ(); }
+function updateMobileCart(){ const el=document.getElementById('z-mobile-count'), tot=document.getElementById('z-mobile-total'); const s=zCart.reduce((a,b)=>a+b.qty,0); const t=zCart.reduce((a,b)=>a+b.price*b.qty,0); if(el) el.textContent=s; if(tot) tot.textContent='₹'+(t>=499||t===0?t:t+50); }
 function renderZCart(){
   const list=document.getElementById('z-cart-items'), subEl=document.getElementById('z-sub'), shipEl=document.getElementById('z-ship-fee'), totEl=document.getElementById('z-total'), fill=document.getElementById('z-ship-fill'), txt=document.getElementById('z-ship-text'), btn=document.getElementById('z-checkout'), form=document.getElementById('z-form-section');
   if(zCart.length===0){ list.innerHTML='<p style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;font-style:italic">Your cart is empty...</p>'; subEl.textContent='₹0'; shipEl.textContent='₹0'; totEl.textContent='₹0'; fill.style.width='0%'; txt.innerHTML='<span style="color:var(--forest)">Add items worth ₹499 for FREE Delivery</span><span style="color:var(--terracotta)" id="z-ship-rem">₹499 left</span>'; btn.disabled=true; form.style.display='none'; return; }
@@ -432,13 +453,13 @@ function checkoutZ(){
   const msg=`*NEW ORDER REQUEST - ZOFED FOODS*\n*Order Ref:* #${ref}\n\n*ORDER ITEMS:*\n${lines}\n*PAYMENT SUMMARY:*\n• *Item Subtotal:* ₹${sub}\n• *Delivery Fee:* ${shipLabel}\n• *Total Amount Payable:* ₹${total}\n\n*DELIVERY DETAILS:*\n• *Customer Name:* ${name}\n• *Phone:* ${phone}\n• *Address:* ${addr}\n• *City:* ${city}\n• *Pincode:* ${pin}\n• *Payment:* ${pay}\n\n_Please confirm availability and share payment details._`;
   window.open(`https://wa.me/message/K53GKHKZ3VELK1?text=${encodeURIComponent(msg)}`,'_blank');
 }
-// Home product preview
-function renderHomeProducts(){ const g=document.getElementById('home-product-grid'); if(!g) return; g.innerHTML=ZOFED_PRODUCTS.map(p=>`<div class="z-prod"><div><span class="z-prod-badge">${p.badge}</span><h3>${p.name}</h3><p>${p.desc}</p></div><div class="z-prod-foot"><strong>₹${p.price}</strong><button onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price})">Add To Cart</button></div></div>`).join(''); }
-function renderHomeRecipes(filter='all'){ const c=document.getElementById('home-recipe-grid'); if(!c) return; const list=filter==='all'?ZOFED_RECIPES.slice(0,8):ZOFED_RECIPES.filter(r=>r.cat===filter).slice(0,8); c.innerHTML=list.map(r=>`<div onclick="openZRecipe(${r.id})" class="z-r-card"><div class="z-r-img"><img src="${r.img}" alt="${r.title}"><span class="z-r-tag">Recipe #${r.id<10?'0'+r.id:r.id}</span></div><div class="z-r-body"><h4>${r.title}</h4><p>${r.desc}</p></div><div class="z-r-foot"><span>View Full Recipe →</span><span>⏱ ${r.time}</span></div></div>`).join(''); }
+// Home product preview - ecom with Add to Cart + Buy Now
+function renderHomeProducts(){ const g=document.getElementById('home-product-grid'); if(!g) return; g.innerHTML=ZOFED_PRODUCTS.map(p=>`<div class="z-prod"><div><span class="z-prod-badge">${p.badge}</span><h3>${p.name}</h3><p>${p.desc}</p></div><div class="z-prod-foot"><div class="z-prod-price"><strong>₹${p.price}</strong><span style="font-size:11px;background:#FEF3C7;padding:4px 8px;border-radius:999px;font-weight:700">250gm • Free ship &gt;₹499</span></div><div class="z-prod-actions"><button class="z-btn-cart" onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price})">Add to Cart</button><button class="z-btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}',${p.price})">Buy Now</button></div></div></div>`).join(''); }
+function renderHomeRecipes(filter='all'){ const c=document.getElementById('home-recipe-grid'); if(!c) return; const list=filter==='all'?ZOFED_RECIPES.slice(0,8):ZOFED_RECIPES.filter(r=>r.cat===filter).slice(0,8); c.innerHTML=list.map(r=>`<div class="z-r-card"><div class="z-r-img" onclick="openZRecipe(${r.id})" style="cursor:pointer"><img src="${r.img}" alt="${r.title}"><span class="z-r-tag">Recipe #${r.id<10?'0'+r.id:r.id}</span></div><div class="z-r-body" onclick="openZRecipe(${r.id})" style="cursor:pointer"><h4>${r.title}</h4><p>${r.desc}</p></div><div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px 12px;gap:6px"><span style="font-size:10px;color:var(--muted);font-weight:700">⏱ ${r.time}</span><button class="z-btn-cart" style="padding:6px 10px;font-size:11px" onclick="event.stopPropagation(); addToZCart('Zofed Master Base Gravies',199)">Add Base</button></div></div>`).join(''); }
 function filterHomeRecipes(cat){ document.querySelectorAll('#home-recipe-filters .z-filter').forEach(b=> b.classList.toggle('active', b.dataset.cat===cat)); renderHomeRecipes(cat); }
 function openZRecipe(id){ const d=ZOFED_RECIPES.find(r=>r.id===id); if(!d) return; document.getElementById('z-recipe-content').innerHTML=`<div class="z-modal-img"><img src="${d.img}" alt="${d.title}"></div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:700"><span>⏱ ${d.time}</span><span>👥 ${d.servings}</span></div><h3 style="font-size:22px;color:var(--forest);margin-top:6px">${d.title}</h3><p style="font-size:12px;color:var(--terracotta);font-weight:600">${d.desc}</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line-2)"><div><h5 style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);background:rgba(45,79,56,.06);padding:6px 8px;border-radius:6px;display:inline-block">📋 Ingredients</h5><ul style="margin-top:10px;display:grid;gap:6px;font-size:12.5px;color:var(--muted)">${d.ingredients.map(i=>`<li>• ${i}</li>`).join('')}</ul></div><div><h5 style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);background:rgba(45,79,56,.06);padding:6px 8px;border-radius:6px;display:inline-block">🍳 Steps</h5><ol style="margin-top:10px;display:grid;gap:8px;font-size:12.5px;color:#333;line-height:1.6">${d.steps.map((s,i)=>`<li><b>${i+1}.</b> ${s}</li>`).join('')}</ol></div></div><div class="z-tip"><b>💡 CHEF'S TIP:</b> ${d.tip}</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line-2)"><span style="font-size:12px;color:var(--muted)">Gravy Required: <b>250g Master Base</b></span><a href="store.html" class="btn btn-primary btn-sm">Order Master Base →</a></div>`; document.getElementById('z-recipe-modal').classList.add('open'); }
 function closeZRecipe(){ document.getElementById('z-recipe-modal').classList.remove('open'); }
-document.addEventListener('DOMContentLoaded',()=>{ renderHomeProducts(); renderHomeRecipes('all'); });
+document.addEventListener('DOMContentLoaded',()=>{ updBadge(); updateMobileCart(); renderHomeProducts(); renderHomeRecipes('all'); });
 </script>
 <script src="js/app.js"></script>
 </body>
