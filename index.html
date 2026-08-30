@@ -422,37 +422,10 @@
 </div>
 
 <script src="js/zofed-data.js"></script>
+<script src="js/cart.js"></script>
 <script src="js/payment.js"></script>
 <script>
-// Homepage Zofed logic (cart + home previews)
-let zCart = JSON.parse(localStorage.getItem('zofed_cart')||'[]');
-function saveZCart(){ localStorage.setItem('zofed_cart', JSON.stringify(zCart)); }
-function toggleZCart(o){ const d=document.getElementById('z-cart-drawer'); if(o){ d.classList.add('open'); renderZCart(); } else d.classList.remove('open'); }
-function addToZCart(name,price){ const ex=zCart.find(i=>i.name===name); if(ex) ex.qty++; else zCart.push({name,price,qty:1}); saveZCart(); updBadge(); updateMobileCart(); toggleZCart(true); }
-function updBadge(){ const c=document.getElementById('cart-count'); if(c) c.textContent = zCart.reduce((s,i)=>s+i.qty,0); }
-function updQty(idx,delta){ if(!zCart[idx]) return; zCart[idx].qty+=delta; if(zCart[idx].qty<=0) zCart.splice(idx,1); saveZCart(); updBadge(); updateMobileCart(); renderZCart(); }
-function selectPay(el,val){ document.querySelectorAll('.z-pay-option').forEach(o=>o.classList.remove('active')); el.classList.add('active'); el.querySelector('input').checked=true; const b=document.getElementById('z-checkout'); if(b) b.textContent = val==='online' ? 'Pay Online via Razorpay →' : 'Proceed & Send Order to WhatsApp →'; }
-function handleCheckout(){ const opt=document.querySelector('input[name="payOpt"]:checked')?.value || document.getElementById('z-pay')?.value || 'cod'; if(opt==='online') initiatePayment('online'); else checkoutZ(); }
-function updateMobileCart(){ const el=document.getElementById('z-mobile-count'), tot=document.getElementById('z-mobile-total'); const s=zCart.reduce((a,b)=>a+b.qty,0); const t=zCart.reduce((a,b)=>a+b.price*b.qty,0); if(el) el.textContent=s; if(tot) tot.textContent='₹'+(t>=499||t===0?t:t+50); }
-function renderZCart(){
-  const list=document.getElementById('z-cart-items'), subEl=document.getElementById('z-sub'), shipEl=document.getElementById('z-ship-fee'), totEl=document.getElementById('z-total'), fill=document.getElementById('z-ship-fill'), txt=document.getElementById('z-ship-text'), btn=document.getElementById('z-checkout'), form=document.getElementById('z-form-section');
-  if(zCart.length===0){ list.innerHTML='<p style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;font-style:italic">Your cart is empty...</p>'; subEl.textContent='₹0'; shipEl.textContent='₹0'; totEl.textContent='₹0'; fill.style.width='0%'; txt.innerHTML='<span style="color:var(--forest)">Add items worth ₹499 for FREE Delivery</span><span style="color:var(--terracotta)" id="z-ship-rem">₹499 left</span>'; btn.disabled=true; form.style.display='none'; return; }
-  btn.disabled=false; form.style.display='grid';
-  let html='', sub=0; zCart.forEach((p,i)=>{ const t=p.price*p.qty; sub+=t; html+=`<div class="z-item"><div style="flex:1"><b style="color:var(--forest);font-size:13px">${p.name}</b><div style="font-size:11px;color:var(--muted)">₹${p.price} each</div></div><div style="display:flex;align-items:center;gap:10px"><div class="z-qty"><button onclick="updQty(${i},-1)">-</button><span>${p.qty}</span><button onclick="updQty(${i},1)">+</button></div><b style="color:var(--forest);min-width:56px;text-align:right">₹${t}</b></div></div>`; });
-  list.innerHTML=html;
-  const thr=499; let fee=0;
-  if(sub>=thr){ fill.style.width='100%'; txt.innerHTML='<span style="color:var(--forest);font-weight:800">🎉 Congratulations! You unlocked FREE Delivery!</span>'; shipEl.textContent='FREE'; shipEl.style.color='#16A34A'; }
-  else { const rem=thr-sub, pct=Math.min(sub/thr*100,100); fill.style.width=pct+'%'; txt.innerHTML=`<span style="color:var(--forest)">Add ₹${rem} more for FREE Delivery</span><span style="color:var(--terracotta);font-weight:800">₹${rem} left</span>`; fee=50; shipEl.textContent='₹50'; shipEl.style.color='var(--ink)'; }
-  subEl.textContent='₹'+sub; totEl.textContent='₹'+(sub+fee);
-}
-function checkoutZ(){
-  const name=document.getElementById('z-name').value.trim(), phone=document.getElementById('z-phone').value.trim(), addr=document.getElementById('z-address').value.trim(), city=(document.getElementById('z-city').value.trim()||'Bhopal, MP'), pin=document.getElementById('z-pincode').value.trim(), pay=document.getElementById('z-pay').value;
-  if(!name||!phone||!addr||!pin){ alert('Please fill Name, WhatsApp Number, Complete Address and Pincode.'); return; }
-  let sub=0, lines=''; zCart.forEach((p,i)=>{ const t=p.price*p.qty; sub+=t; lines+=`${i+1}. ${p.name} (250g) x ${p.qty} - ₹${t}\n`; });
-  const fee=sub>=499?0:50, shipLabel=fee===0?'FREE (Unlocked above ₹499)':'₹50', total=sub+fee, ref='ZF-'+Math.floor(100000+Math.random()*900000);
-  const msg=`*NEW ORDER REQUEST - ZOFED FOODS*\n*Order Ref:* #${ref}\n\n*ORDER ITEMS:*\n${lines}\n*PAYMENT SUMMARY:*\n• *Item Subtotal:* ₹${sub}\n• *Delivery Fee:* ${shipLabel}\n• *Total Amount Payable:* ₹${total}\n\n*DELIVERY DETAILS:*\n• *Customer Name:* ${name}\n• *Phone:* ${phone}\n• *Address:* ${addr}\n• *City:* ${city}\n• *Pincode:* ${pin}\n• *Payment:* ${pay}\n\n_Please confirm availability and share payment details._`;
-  window.open(`https://wa.me/message/K53GKHKZ3VELK1?text=${encodeURIComponent(msg)}`,'_blank');
-}
+// Homepage previews only - cart logic in js/cart.js + js/payment.js
 // Home product preview - ecom with Add to Cart + Buy Now + Call/WhatsApp
 function renderHomeProducts(){ const g=document.getElementById('home-product-grid'); if(!g) return; g.innerHTML=ZOFED_PRODUCTS.map(p=>`<div class="z-prod"><div><span class="z-prod-badge">${p.badge}</span><h3>${p.name}</h3><p>${p.desc}</p></div><div class="z-prod-foot"><div class="z-prod-price"><strong>₹${p.price}</strong><span style="font-size:11px;background:#FEF3C7;padding:4px 8px;border-radius:999px;font-weight:700">250gm • Free ship &gt;₹499</span></div><div class="z-prod-actions"><button class="z-btn-cart" onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price})">Add to Cart</button><button class="z-btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}',${p.price})">Buy Now</button></div><div class="z-quick-actions"><a href="tel:+917240975556" class="z-btn-call">📞 Call</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="z-btn-wa">💬 WhatsApp</a></div></div></div>`).join(''); }
 function renderHomeRecipes(filter='all'){ const c=document.getElementById('home-recipe-grid'); if(!c) return; const list=filter==='all'?ZOFED_RECIPES.slice(0,8):ZOFED_RECIPES.filter(r=>r.cat===filter).slice(0,8); c.innerHTML=list.map(r=>`<div class="z-r-card"><div class="z-r-img" onclick="openZRecipe(${r.id})" style="cursor:pointer"><img src="${r.img}" alt="${r.title}"><span class="z-r-tag">Recipe #${r.id<10?'0'+r.id:r.id}</span></div><div class="z-r-body" onclick="openZRecipe(${r.id})" style="cursor:pointer"><h4>${r.title}</h4><p>${r.desc}</p></div><div style="display:grid;gap:6px;padding:8px 12px 12px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:10px;color:var(--muted);font-weight:700">⏱ ${r.time}</span><button class="z-btn-cart" style="padding:7px 12px;font-size:11px;min-height:36px" onclick="event.stopPropagation(); addToZCart('Zofed Master Base Gravies',199)">Add to Cart</button></div><div class="z-quick-actions" style="margin-top:0"><a href="tel:+917240975556" class="z-btn-call" style="padding:6px 8px;min-height:34px;font-size:11px" onclick="event.stopPropagation()">📞 Call</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="z-btn-wa" style="padding:6px 8px;min-height:34px;font-size:11px" onclick="event.stopPropagation()">💬 WhatsApp</a></div></div></div>`).join(''); }

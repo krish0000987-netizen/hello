@@ -15,8 +15,8 @@ const PAYMENT_CONFIG = {
 };
 
 function getCartTotalForPayment(){
-  // used by all pages - zCart is global
-  const sub = (typeof zCart !== 'undefined' ? zCart.reduce((s,i)=> s + i.price * i.qty, 0) : 0);
+  const cart = (typeof window.zCart !== 'undefined' ? window.zCart : (typeof zCart !== 'undefined' ? zCart : []));
+  const sub = cart.reduce((s,i)=> s + i.price * i.qty, 0);
   const fee = sub >= 499 ? 0 : (sub > 0 ? 50 : 0);
   return { subtotal: sub, shipping: fee, total: sub + fee };
 }
@@ -51,7 +51,7 @@ function initiatePayment(method){
       amount: total * 100, // paise
       currency: PAYMENT_CONFIG.CURRENCY,
       name: PAYMENT_CONFIG.COMPANY_NAME,
-      description: `Zofed Order - ${zCart.length} items (Subtotal ₹${subtotal} + Shipping ₹${shipping})`,
+      description: `Zofed Order - ${(window.zCart||[]).length} items (Subtotal ₹${subtotal} + Shipping ₹${shipping})`,
       image: "https://via.placeholder.com/128x128/9B1C1C/FFFFFF?text=ZF",
       prefill: {
         name: nameEl ? nameEl.value : "",
@@ -59,12 +59,12 @@ function initiatePayment(method){
       },
       notes: {
         address: addrEl ? addrEl.value : "",
-        items: zCart.map(i=> `${i.name} x${i.qty}`).join(', ')
+        items: (window.zCart||[]).map(i=> `${i.name} x${i.qty}`).join(', ')
       },
       theme: { color: "#9B1C1C" },
       handler: function(resp){
-        // Payment success - send to WhatsApp with payment ID
-        const msg = `*PAYMENT SUCCESS - ZOFED FOODS*\n*Payment ID:* ${resp.razorpay_payment_id}\n*Amount Paid:* ₹${total}\n*Items:* ${zCart.map(i=> `${i.name} x${i.qty}`).join(', ')}\n*Customer:* ${nameEl? nameEl.value : ''} - ${phoneEl? phoneEl.value : ''}`;
+        const cart = window.zCart||[];
+        const msg = `*PAYMENT SUCCESS - ZOFED FOODS*\n*Payment ID:* ${resp.razorpay_payment_id}\n*Amount Paid:* ₹${total}\n*Items:* ${cart.map(i=> `${i.name} x${i.qty}`).join(', ')}\n*Customer:* ${nameEl? nameEl.value : ''} - ${phoneEl? phoneEl.value : ''}`;
         window.open(`https://wa.me/message/K53GKHKZ3VELK1?text=${encodeURIComponent(msg)}`,'_blank');
         // Optionally clear cart & show thank you
         alert('Payment successful! Payment ID: ' + resp.razorpay_payment_id + '\nWe have opened WhatsApp for order confirmation.');
@@ -84,13 +84,18 @@ function initiatePayment(method){
   }
 }
 
-// Buy Now = direct checkout for single product
+// Buy Now = direct checkout for single product - uses window.zCart for cross-scope compatibility
 function buyNow(productName, price){
-  // Reset cart to single item and open drawer
-  zCart = [{ name: productName, price: price, qty: 1 }];
+  window.zCart = [{ name: productName, price: price, qty: 1 }];
+  // also update legacy let variable if exists (for inline scripts using let)
+  try{ zCart = window.zCart; }catch(e){}
+  if(window.saveZCart) window.saveZCart();
+  else { try{ localStorage.setItem('zofed_cart', JSON.stringify(window.zCart)); }catch(e){} }
   if(typeof updBadge === 'function') updBadge();
+  if(typeof window.updBadge === 'function') window.updBadge();
+  if(typeof updateMobileCart === 'function') updateMobileCart();
+  if(typeof window.updateMobileCart === 'function') window.updateMobileCart();
   if(typeof toggleZCart === 'function') toggleZCart(true);
-  // Optionally auto-scroll to payment options
   setTimeout(()=> {
     const el = document.getElementById('z-pay');
     if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
