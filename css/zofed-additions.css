@@ -1,0 +1,121 @@
+/* Zofed Additions - New homepage sections + Store + Recipe Hub - matches existing design system */
+:root{ --terracotta:#C84B31; --forest:#2D4F38; --saffron:#F4A261; --forest-light:#3E5A3B; }
+
+/* — Top Announcement — */
+.zofed-announce{ background:var(--forest); color:white; font-size:12px; font-weight:600; padding:9px 16px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; letter-spacing:.02em; }
+.zofed-announce a{ color:var(--saffron); text-decoration:underline; font-weight:800; }
+.zofed-announce a:hover{ color:white; }
+@media(max-width:640px){ .zofed-announce{ font-size:11px; justify-content:center; text-align:center; } }
+
+/* — Cart Icon in Header — */
+.zofed-cart-btn{ position:relative; width:42px; height:42px; border-radius:50%; background:white; border:1px solid var(--line); display:grid; place-items:center; cursor:pointer; transition:all .2s; flex-shrink:0; }
+.zofed-cart-btn:hover{ border-color:var(--terracotta); color:var(--terracotta); }
+.zofed-cart-badge{ position:absolute; top:-6px; right:-6px; background:var(--terracotta); color:white; font-size:10px; font-weight:800; min-width:18px; height:18px; border-radius:999px; display:grid; place-items:center; padding:0 4px; line-height:1; }
+
+/* — Identity Section — */
+.z-ident{ background:white; border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2); padding:64px 0; }
+.z-ident-head{ text-align:center; max-width:640px; margin:0 auto 36px; }
+.z-ident-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-bottom:32px; }
+.z-ident-grid h4{ font-size:16px; margin-bottom:6px; color:var(--forest); }
+.z-ident-grid p{ font-size:13.5px; color:var(--muted); line-height:1.7; }
+.z-audience{ background:var(--cream-2); border:1px solid var(--line-2); border-radius:20px; padding:20px; }
+.z-audience h4{ text-align:center; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--forest); margin-bottom:16px; }
+.z-aud-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.z-aud-card{ background:white; border:1px solid var(--line-2); border-radius:14px; padding:16px; }
+.z-aud-card b.t{ color:var(--terracotta); font-size:13px; display:block; margin-bottom:6px; }
+.z-aud-card p{ font-size:12px; color:#6B6B63; line-height:1.6; }
+.z-aud-card b.r{ color:var(--forest); font-size:11.5px; display:block; margin-top:8px; line-height:1.5; }
+
+/* — Store Preview — */
+.z-store{ padding:64px 0; background:var(--cream); }
+.z-store-head{ text-align:center; max-width:640px; margin:0 auto 32px; }
+.z-store-head h2{ font-size:clamp(30px,4vw,40px); }
+.z-store-head p{ color:var(--muted); font-size:14px; margin-top:8px; }
+.z-prod-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+.z-prod{ background:white; border:1px solid var(--line-2); border-radius:18px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; transition:all .3s; box-shadow:var(--shadow-soft); }
+.z-prod:hover{ transform:translateY(-4px); box-shadow:var(--shadow-card); border-color:rgba(200,75,49,.2); }
+.z-prod-badge{ background:rgba(45,79,56,.08); color:var(--forest); font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; padding:4px 8px; border-radius:999px; }
+.z-prod h3{ font-size:15px; color:var(--forest); margin-top:10px; line-height:1.2; }
+.z-prod p{ font-size:12.5px; color:var(--muted); line-height:1.6; margin-top:6px; }
+.z-prod-foot{ display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid var(--line-2); }
+.z-prod-foot strong{ font-size:15px; color:var(--forest); }
+.z-prod-foot button{ background:var(--terracotta); color:white; border:none; padding:7px 12px; border-radius:999px; font-size:12px; font-weight:700; cursor:pointer; transition:.2s; }
+.z-prod-foot button:hover{ background:#A93D27; }
+
+/* — Recipe Hub Preview — */
+.z-hub{ background:white; border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2); padding:64px 0; }
+.z-hub-head{ text-align:center; max-width:640px; margin:0 auto 28px; }
+.z-filters{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:28px; }
+.z-filter{ padding:8px 16px; border-radius:999px; border:1px solid var(--line); background:white; font-size:12px; font-weight:700; cursor:pointer; transition:.2s; }
+.z-filter.active{ background:var(--forest); color:white; border-color:var(--forest); }
+.z-filter:hover{ border-color:var(--forest); color:var(--forest); }
+.z-filter.active:hover{ color:white; }
+.z-recipe-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+.z-r-card{ background:var(--cream-2); border:1px solid var(--line-2); border-radius:18px; overflow:hidden; cursor:pointer; transition:all .3s; display:flex; flex-direction:column; }
+.z-r-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-card); }
+.z-r-img{ height:160px; overflow:hidden; position:relative; }
+.z-r-img img{ width:100%; height:100%; object-fit:cover; transition:.4s; }
+.z-r-card:hover .z-r-img img{ transform:scale(1.05); }
+.z-r-tag{ position:absolute; top:10px; left:10px; background:var(--terracotta); color:white; font-size:10px; font-weight:800; padding:3px 7px; border-radius:999px; }
+.z-r-body{ padding:14px 14px 12px; flex:1; }
+.z-r-body h4{ font-size:14px; color:var(--forest); line-height:1.3; }
+.z-r-body p{ font-size:11.5px; color:var(--muted); margin-top:4px; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.z-r-foot{ display:flex; justify-content:space-between; align-items:center; padding:10px 14px 14px; font-size:11px; font-weight:700; }
+.z-r-foot span:first-child{ color:var(--terracotta); }
+.z-r-foot span:last-child{ color:var(--muted); font-size:10px; }
+
+/* — Regulatory strip — */
+.z-reg{ background:rgba(45,79,56,.06); border:1px solid var(--line-2); border-radius:14px; padding:14px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+.z-reg strong{ color:var(--forest); }
+.z-reg span{ font-size:11px; color:var(--muted); }
+
+/* — Drawer & Modal — */
+.z-drawer{ position:fixed; inset:0; z-index:70; display:none; }
+.z-drawer.open{ display:block; }
+.z-drawer-back{ position:absolute; inset:0; background:rgba(26,26,24,.45); backdrop-filter:blur(4px); }
+.z-drawer-panel{ position:absolute; top:0; right:0; width:min(420px,92vw); height:100%; background:white; box-shadow:-20px 0 60px rgba(0,0,0,.2); display:flex; flex-direction:column; overflow:hidden; animation:zSlide .32s cubic-bezier(.22,1,.36,1); }
+@keyframes zSlide{ from{ transform:translateX(100%);} to{ transform:translateX(0);} }
+.z-drawer-head{ display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line-2); }
+.z-ship{ background:var(--cream-2); border:1px solid var(--line-2); border-radius:12px; padding:12px; margin:14px 20px 0; }
+.z-ship-bar{ height:6px; background:#E8E2D9; border-radius:999px; overflow:hidden; margin-top:8px; }
+.z-ship-fill{ height:100%; background:var(--forest); border-radius:999px; transition:width .3s; }
+.z-items{ flex:1; overflow:auto; padding:14px 20px; display:grid; gap:10px; align-content:start; }
+.z-item{ display:flex; justify-content:space-between; align-items:center; background:#F9F6F0; border:1px solid var(--line-2); border-radius:12px; padding:10px 12px; font-size:13px; }
+.z-qty{ display:flex; align-items:center; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:white; }
+.z-qty button{ width:28px; height:28px; border:none; background:white; cursor:pointer; font-weight:800; }
+.z-qty span{ padding:0 8px; font-weight:700; font-size:12px; min-width:20px; text-align:center; }
+.z-drawer-foot{ padding:16px 20px calc(16px + env(safe-area-inset-bottom)); border-top:1px solid var(--line-2); background:var(--cream-2); }
+.z-sum{ display:grid; gap:6px; font-size:13px; color:var(--muted); margin-bottom:12px; }
+.z-sum b{ color:var(--ink); }
+.z-sum .total{ display:flex; justify-content:space-between; font-weight:800; color:var(--forest); font-size:15px; border-top:1px solid var(--line); padding-top:8px; }
+.z-sum .total span:last-child{ color:var(--terracotta); }
+.z-check{ width:100%; background:#128C7E; color:white; border:none; padding:13px; border-radius:999px; font-weight:800; font-size:14px; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:8px; }
+.z-check:disabled{ opacity:.5; cursor:not-allowed; }
+.z-form{ padding:16px 20px 0; border-top:1px solid var(--line-2); display:grid; gap:10px; }
+.z-form h4{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--forest); }
+.z-form label{ font-size:11px; font-weight:700; color:#444; }
+.z-form input, .z-form select, .z-form textarea{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--cream); font-size:13px; outline:none; }
+.z-form input:focus, .z-form select:focus, .z-form textarea:focus{ border-color:var(--forest); background:white; }
+
+/* — Recipe Modal — */
+.z-modal{ position:fixed; inset:0; z-index:72; display:none; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,.6); backdrop-filter:blur(6px); }
+.z-modal.open{ display:flex; }
+.z-modal-card{ background:white; border-radius:20px; max-width:720px; width:100%; max-height:92vh; overflow:auto; padding:20px; position:relative; box-shadow:0 24px 80px rgba(0,0,0,.25); }
+.z-modal-close{ position:absolute; top:12px; right:12px; width:36px; height:36px; border-radius:50%; border:1px solid var(--line); background:white; cursor:pointer; font-size:20px; display:grid; place-items:center; }
+.z-modal-img{ height:220px; border-radius:14px; overflow:hidden; background:#eee; margin-bottom:14px; }
+.z-modal-img img{ width:100%; height:100%; object-fit:cover; }
+.z-tip{ background:#FFFBEB; border-left:4px solid #F59E0B; padding:12px; border-radius:10px; font-size:12.5px; color:#92400E; line-height:1.6; margin-top:14px; }
+
+/* Responsive */
+@media(max-width:1024px){ .z-prod-grid{ grid-template-columns:repeat(3,1fr);} .z-recipe-grid{ grid-template-columns:repeat(3,1fr);} }
+@media(max-width:720px){
+  .z-ident-grid{ grid-template-columns:1fr; gap:18px; }
+  .z-aud-grid{ grid-template-columns:1fr; }
+  .z-prod-grid{ grid-template-columns:1fr 1fr; gap:12px; }
+  .z-recipe-grid{ grid-template-columns:1fr 1fr; gap:12px; }
+  .z-ident, .z-store, .z-hub{ padding:40px 0; }
+}
+@media(max-width:480px){
+  .z-prod-grid{ grid-template-columns:1fr; }
+  .z-recipe-grid{ grid-template-columns:1fr; }
+}

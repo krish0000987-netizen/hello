@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#9B1C1C">
+<title>50 Recipe Master Hub — Zofed Foods Interactive E-Book</title>
+<meta name="description" content="Explore all 50 Zofed Foods master recipes — Paneer, Mutton, Chicken, Veg, Dal, Biryani & more. Every dish table-ready in 10-15 mins with 250gm base gravies.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/zofed-additions.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' rx='12' fill='%239B1C1C'/%3E%3Ctext x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-weight='700' font-size='20' fill='white'%3EZ%3C/text%3E%3C/svg%3E">
+<style>
+.z-search{ max-width:520px; margin:0 auto 18px; display:flex; align-items:center; gap:10px; background:white; border:1px solid var(--line); border-radius:999px; padding:10px 14px; }
+.z-search input{ border:none; outline:none; width:100%; font-size:14px; font-family:inherit; }
+</style>
+</head>
+<body>
+<div class="zofed-announce">
+  <span>★ COMPLETE 50-RECIPE MASTER BOOK INTEGRATED | Free Shipping Above ₹499</span>
+  <span><a href="store.html">Shop 250gm Range →</a> &nbsp; | &nbsp; <a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank">WhatsApp Chat</a></span>
+</div>
+<header class="header">
+  <div class="container header-inner">
+    <a href="index.html" class="brand"><div class="brand-mark">Z</div><div class="brand-text"><strong>Zofed Foods</strong><span>Ready to Cook</span></div></a>
+    <nav class="nav"><a href="index.html">Home</a><a href="about.html">About</a><a href="products.html">Products</a><a href="store.html">Shop 250gm</a><a href="master-recipes.html" class="active">50 Recipes</a><a href="quality.html">Quality</a><a href="contact.html">Contact</a></nav>
+    <div class="header-actions">
+      <button class="zofed-cart-btn" onclick="toggleZCart(true)" aria-label="Open cart">🛒<span class="zofed-cart-badge" id="cart-count">0</span></button>
+      <a href="tel:+917240975556" class="btn btn-ghost btn-sm">Call Now</a>
+      <a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="btn btn-whatsapp btn-sm">WhatsApp</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="drawer" id="drawer"><div class="drawer-backdrop"></div><div class="drawer-panel"><div class="drawer-head"><div class="brand"><div class="brand-mark">Z</div><div class="brand-text"><strong>Zofed Foods</strong><span>Ready to Cook</span></div></div><button id="drawerClose" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:white;cursor:pointer">✕</button></div><nav class="drawer-nav"><a href="index.html">Home <span>→</span></a><a href="store.html">Shop 250gm <span>→</span></a><a href="master-recipes.html" class="active">50 Recipe Hub <span>→</span></a><a href="products.html">Products <span>→</span></a><a href="recipes.html">Recipes <span>→</span></a><a href="contact.html">Contact <span>→</span></a></nav><div class="drawer-cta"><a href="tel:+917240975556" class="btn btn-primary">Call: 72409 75556</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="btn btn-whatsapp">WhatsApp Chat</a></div></div></div>
+
+<main>
+<section class="page-hero">
+  <div class="container" style="text-align:center">
+    <div class="breadcrumb" style="justify-content:center"><a href="index.html">Home</a><span>/</span><span>50 Recipe Hub</span></div>
+    <div class="eyebrow" style="justify-content:center">Interactive Master E-Book (All 50 Recipes)</div>
+    <h1>Culinary Master Recipe Hub.</h1>
+    <p style="margin:10px auto 0;max-width:640px">Click any dish card to view step-by-step master instructions, authentic ingredients & chef secrets. Every recipe is <b>table-ready in 10–15 mins</b> with a 250gm Zofed base. Free shipping above ₹499.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:18px">
+  <div class="container">
+    <div class="z-search"><span>⌕</span><input id="recipeSearch" type="search" placeholder="Search 50 recipes — e.g. Paneer Butter Masala, Biryani, Korma..."><button id="clearSearch" style="display:none;border:1px solid var(--line);background:white;width:28px;height:28px;border-radius:50%;cursor:pointer">✕</button></div>
+    <div class="z-filters" id="recipe-filters">
+      <button onclick="filterRecipes('all')" class="z-filter active" data-cat="all">All 50 Recipes</button>
+      <button onclick="filterRecipes('paneer')" class="z-filter" data-cat="paneer">Paneer & Kofta</button>
+      <button onclick="filterRecipes('nonveg')" class="z-filter" data-cat="nonveg">Mutton, Chicken & Eggs</button>
+      <button onclick="filterRecipes('veg')" class="z-filter" data-cat="veg">Veg, Dal & Dhaba</button>
+      <button onclick="filterRecipes('biryani')" class="z-filter" data-cat="biryani">Biryani & Rice</button>
+    </div>
+    <div class="z-recipe-grid" id="recipe-grid"></div>
+    <div id="no-results" style="display:none;text-align:center;padding:32px;background:white;border:1px dashed var(--line);border-radius:16px;margin-top:18px"><h3 style="color:var(--forest)">No recipes found</h3><p style="color:var(--muted);font-size:13px;margin-top:6px">Try a different search or filter.</p></div>
+    <div style="margin-top:22px;background:white;border:1px solid var(--line-2);border-radius:16px;padding:16px;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+      <div style="font-size:13px;color:var(--muted)"><strong style="color:var(--ink)">All 50 recipes use 250gm Master Base</strong> — shop the 7 premium gravies starting ₹149.</div>
+      <a href="store.html" class="btn btn-primary btn-sm">Shop 250gm Range →</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer"><div class="container"><div class="footer-top"><div class="footer-brand"><div class="brand"><div class="brand-mark">Z</div><div class="brand-text"><strong style="color:white">Zofed Foods</strong><span style="color:rgba(255,255,255,0.6)">Ready to Cook</span></div></div><p>50 authentic recipes, 7 premium 250gm bases, 10–15 min table-ready. FSSAI 11426045000358.</p></div><div><h4>Quick Links</h4><div class="footer-links"><a href="index.html">Home</a><a href="store.html">Shop 250gm</a><a href="master-recipes.html">50 Recipes</a></div></div><div><h4>Explore</h4><div class="footer-links"><a href="recipes.html">Recipes</a><a href="quality.html">Quality</a><a href="contact.html">Contact</a></div></div><div><h4>Contact</h4><div class="footer-contact"><div>📍 Nasheman 12, Shahjahanabad, Bhopal, MP</div><div>📞 7240975556</div><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" style="color:var(--gold-light);font-weight:700">Direct WhatsApp Chat →</a></div></div></div><div class="footer-bottom"><span>© 2026 Zofed Foods. Master Book Integrated.</span><span>Bhopal, MP</span></div></div></footer>
+
+<!-- Cart Drawer -->
+<div id="z-cart-drawer" class="z-drawer" aria-hidden="true">
+  <div class="z-drawer-back" onclick="toggleZCart(false)"></div>
+  <div class="z-drawer-panel">
+    <div class="z-drawer-head"><h3 style="font-size:18px;color:var(--forest)">🛒 Shopping Cart</h3><button onclick="toggleZCart(false)" style="width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:white;cursor:pointer">✕</button></div>
+    <div class="z-ship"><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700" id="z-ship-text"><span style="color:var(--forest)">Add items worth ₹499 for FREE Delivery</span><span style="color:var(--terracotta)">₹499 left</span></div><div class="z-ship-bar"><div id="z-ship-fill" class="z-ship-fill" style="width:0%"></div></div></div>
+    <div id="z-cart-items" class="z-items"><p style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;font-style:italic">Your cart is empty...</p></div>
+    <div id="z-form-section" class="z-form" style="display:none">
+      <h4>📍 Dispatch & Delivery Coordinates</h4>
+      <label>Full Name *<input id="z-name" placeholder="e.g. Sarfaraz Mohammad"></label>
+      <label>WhatsApp / Contact *<input id="z-phone" placeholder="9876543210"></label>
+      <label>Complete Address *<textarea id="z-address" rows="2" placeholder="House/Flat No, Building, Landmark"></textarea></label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label>City / State *<input id="z-city" value="Bhopal, MP"></label><label>Pincode *<input id="z-pincode" placeholder="462001"></label></div>
+      <label>Payment Mode<select id="z-pay"><option>UPI / Online QR</option><option>Cash on Delivery (COD)</option></select></label>
+    </div>
+    <div class="z-drawer-foot">
+      <div class="z-sum"><div style="display:flex;justify-content:space-between"><span>Items Subtotal:</span><b id="z-sub">₹0</b></div><div style="display:flex;justify-content:space-between"><span>Delivery Charges:</span><b id="z-ship-fee">₹0</b></div><div class="total"><span>Total Payable:</span><span id="z-total">₹0</span></div></div>
+      <button id="z-checkout" disabled onclick="checkoutZ()" class="z-check">Proceed & Send Order to WhatsApp →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Recipe Modal -->
+<div id="z-recipe-modal" class="z-modal" onclick="if(event.target===this) closeZRecipe()">
+  <div class="z-modal-card">
+    <button class="z-modal-close" onclick="closeZRecipe()">✕</button>
+    <div id="z-recipe-content"></div>
+  </div>
+</div>
+
+<script src="js/zofed-data.js"></script>
+<script src="js/app.js"></script>
+<script>
+let zCart=[], activeCat='all';
+function toggleZCart(o){ const d=document.getElementById('z-cart-drawer'); if(o){ d.classList.add('open'); renderZCart(); } else d.classList.remove('open'); }
+function updBadge(){ document.getElementById('cart-count').textContent=zCart.reduce((s,i)=>s+i.qty,0); }
+function updQty(idx,delta){ if(!zCart[idx]) return; zCart[idx].qty+=delta; if(zCart[idx].qty<=0) zCart.splice(idx,1); updBadge(); renderZCart(); }
+function renderZCart(){
+  const list=document.getElementById('z-cart-items'), subEl=document.getElementById('z-sub'), shipEl=document.getElementById('z-ship-fee'), totEl=document.getElementById('z-total'), fill=document.getElementById('z-ship-fill'), txt=document.getElementById('z-ship-text'), btn=document.getElementById('z-checkout'), form=document.getElementById('z-form-section');
+  if(zCart.length===0){ list.innerHTML='<p style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;font-style:italic">Your cart is empty...</p>'; subEl.textContent='₹0'; shipEl.textContent='₹0'; totEl.textContent='₹0'; fill.style.width='0%'; txt.innerHTML='<span style="color:var(--forest)">Add items worth ₹499 for FREE Delivery</span><span style="color:var(--terracotta)">₹499 left</span>'; btn.disabled=true; form.style.display='none'; return; }
+  btn.disabled=false; form.style.display='grid';
+  let html='', sub=0; zCart.forEach((p,i)=>{ const t=p.price*p.qty; sub+=t; html+=`<div class="z-item"><div style="flex:1"><b style="color:var(--forest);font-size:13px">${p.name}</b><div style="font-size:11px;color:var(--muted)">₹${p.price} each</div></div><div style="display:flex;align-items:center;gap:10px"><div class="z-qty"><button onclick="updQty(${i},-1)">-</button><span>${p.qty}</span><button onclick="updQty(${i},1)">+</button></div><b style="color:var(--forest);min-width:56px;text-align:right">₹${t}</b></div></div>`; });
+  list.innerHTML=html;
+  const thr=499; let fee=0;
+  if(sub>=thr){ fill.style.width='100%'; txt.innerHTML='<span style="color:var(--forest);font-weight:800">🎉 FREE Delivery Unlocked!</span>'; shipEl.textContent='FREE'; shipEl.style.color='#16A34A'; }
+  else { const rem=thr-sub, pct=Math.min(sub/thr*100,100); fill.style.width=pct+'%'; txt.innerHTML=`<span style="color:var(--forest)">Add ₹${rem} more for FREE Delivery</span><span style="color:var(--terracotta);font-weight:800">₹${rem} left</span>`; fee=50; shipEl.textContent='₹50'; }
+  subEl.textContent='₹'+sub; totEl.textContent='₹'+(sub+fee);
+}
+function checkoutZ(){
+  const name=document.getElementById('z-name').value.trim(), phone=document.getElementById('z-phone').value.trim(), addr=document.getElementById('z-address').value.trim(), city=(document.getElementById('z-city').value.trim()||'Bhopal, MP'), pin=document.getElementById('z-pincode').value.trim(), pay=document.getElementById('z-pay').value;
+  if(!name||!phone||!addr||!pin){ alert('Please fill Name, WhatsApp, Address and Pincode.'); return; }
+  let sub=0, lines=''; zCart.forEach((p,i)=>{ const t=p.price*p.qty; sub+=t; lines+=`${i+1}. ${p.name} (250g) x ${p.qty} - ₹${t}\n`; });
+  if(!lines) lines='(No items — enquiry only)\n';
+  const fee=sub>=499?0:50, shipLabel=fee===0?'FREE':'₹50', total=sub+fee, ref='ZF-'+Math.floor(100000+Math.random()*900000);
+  const msg=`*NEW ORDER REQUEST - ZOFED FOODS*\n*Order Ref:* #${ref}\n\n*ORDER ITEMS:*\n${lines}\n*PAYMENT SUMMARY:*\n• *Subtotal:* ₹${sub}\n• *Delivery:* ${shipLabel}\n• *Total:* ₹${total}\n\n*DELIVERY:*\n• *Name:* ${name}\n• *Phone:* ${phone}\n• *Address:* ${addr}\n• *City:* ${city}\n• *Pincode:* ${pin}\n• *Payment:* ${pay}`;
+  window.open(`https://wa.me/message/K53GKHKZ3VELK1?text=${encodeURIComponent(msg)}`,'_blank');
+}
+function renderRecipes(){
+  const q=(document.getElementById('recipeSearch').value||'').toLowerCase();
+  const grid=document.getElementById('recipe-grid'), noEl=document.getElementById('no-results');
+  let list=ZOFED_RECIPES.filter(r=> activeCat==='all'||r.cat===activeCat);
+  if(q) list=list.filter(r=> (r.title+r.desc+r.tag).toLowerCase().includes(q));
+  if(list.length===0){ grid.innerHTML=''; noEl.style.display='block'; return; }
+  noEl.style.display='none';
+  grid.innerHTML=list.map(r=>`<div onclick="openZRecipe(${r.id})" class="z-r-card"><div class="z-r-img"><img src="${r.img}" alt="${r.title}" loading="lazy"><span class="z-r-tag">Recipe #${r.id<10?'0'+r.id:r.id}</span></div><div class="z-r-body"><h4>${r.title}</h4><p>${r.desc}</p></div><div class="z-r-foot"><span>View Recipe →</span><span>⏱ ${r.time}</span></div></div>`).join('');
+}
+function filterRecipes(cat){ activeCat=cat; document.querySelectorAll('#recipe-filters .z-filter').forEach(b=> b.classList.toggle('active', b.dataset.cat===cat)); renderRecipes(); }
+function openZRecipe(id){ const d=ZOFED_RECIPES.find(r=>r.id===id); if(!d) return; document.getElementById('z-recipe-content').innerHTML=`<div class="z-modal-img"><img src="${d.img}" alt="${d.title}"></div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:700"><span>⏱ ${d.time}</span><span>👥 ${d.servings}</span></div><h3 style="font-size:22px;color:var(--forest);margin-top:6px">${d.title}</h3><p style="font-size:12px;color:var(--terracotta);font-weight:600">${d.tag}</p><p style="font-size:13px;color:var(--muted);margin-top:4px">${d.desc}</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line-2)"><div><h5 style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);background:rgba(45,79,56,.06);padding:6px 8px;border-radius:6px;display:inline-block">📋 Ingredients</h5><ul style="margin-top:10px;display:grid;gap:6px;font-size:12.5px;color:var(--muted)">${d.ingredients.map(i=>`<li>• ${i}</li>`).join('')}</ul></div><div><h5 style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--forest);background:rgba(45,79,56,.06);padding:6px 8px;border-radius:6px;display:inline-block">🍳 Steps</h5><ol style="margin-top:10px;display:grid;gap:8px;font-size:12.5px;color:#333;line-height:1.6">${d.steps.map((s,i)=>`<li><b>${i+1}.</b> ${s}</li>`).join('')}</ol></div></div><div class="z-tip"><b>💡 CHEF'S TIP:</b> ${d.tip}</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line-2)"><span style="font-size:12px;color:var(--muted)">Requires: <b>250g Master Base</b></span><a href="store.html" class="btn btn-primary btn-sm">Order Base Pack →</a></div>`; document.getElementById('z-recipe-modal').classList.add('open'); }
+function closeZRecipe(){ document.getElementById('z-recipe-modal').classList.remove('open'); }
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderRecipes();
+  const inp=document.getElementById('recipeSearch'), clr=document.getElementById('clearSearch');
+  inp.addEventListener('input', ()=>{ clr.style.display= inp.value ? 'grid' : 'none'; renderRecipes(); });
+  clr.addEventListener('click', ()=>{ inp.value=''; clr.style.display='none'; renderRecipes(); inp.focus(); });
+});
+</script>
+</body>
+</html>
