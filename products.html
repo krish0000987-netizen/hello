@@ -6,8 +6,8 @@
 <meta name="format-detection" content="telephone=yes">
 <title>Products — Zofed Foods Premium Ready-to-Cook Catalog</title>
 <meta name="description" content="Explore Zofed Foods ready-to-cook catalog — snacks, meal solutions, delicacies and Indian favourites. Premium FMCG products from Bhopal.">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/zofed-additions.css">
+<link rel="stylesheet" href="css/style.css?v=036b886">
+<link rel="stylesheet" href="css/zofed-additions.css?v=036b886">
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' rx='12' fill='%239B1C1C'/%3E%3Ctext x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-weight='700' font-size='20' fill='white'%3EZ%3C/text%3E%3C/svg%3E">
 </head>
@@ -109,10 +109,10 @@
 <!-- Cart Drawer for products.html -->
 <div id="z-cart-drawer" class="z-drawer" aria-hidden="true"><div class="z-drawer-back" onclick="toggleZCart(false)"></div><div class="z-drawer-panel"><div class="z-drawer-head"><h3 style="font-size:18px;color:var(--forest)">🛒 Shopping Cart</h3><button onclick="toggleZCart(false)" style="width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:white;cursor:pointer">✕</button></div><div class="z-ship"><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700" id="z-ship-text"><span style="color:var(--forest)">Add items worth ₹499 for FREE Delivery</span><span style="color:var(--terracotta)">₹499 left</span></div><div class="z-ship-bar"><div id="z-ship-fill" class="z-ship-fill" style="width:0%"></div></div></div><div class="z-drawer-body"><div id="z-cart-items" class="z-items"><p style="text-align:center;color:var(--muted);font-size:13px;padding:20px 0;font-style:italic">Your cart is empty...</p></div><div id="z-form-section" class="z-form" style="display:none"><h4>📍 Dispatch Details</h4><label>Full Name *<input id="z-name" placeholder="Your name"></label><label>WhatsApp *<input id="z-phone" placeholder="9876543210"></label><label>Address *<textarea id="z-address" rows="2" placeholder="House, Street, Landmark"></textarea></label><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><label>City *<input id="z-city" value="Bhopal, MP"></label><label>Pincode *<input id="z-pincode" placeholder="462001"></label></div><label>Payment<select id="z-pay"><option>UPI / Online QR</option><option>Cash on Delivery (COD)</option></select></label></div></div><div class="z-drawer-foot"><div class="z-sum"><div style="display:flex;justify-content:space-between"><span>Subtotal:</span><b id="z-sub">₹0</b></div><div style="display:flex;justify-content:space-between"><span>Shipping:</span><b id="z-ship-fee">₹0</b></div><div class="total"><span>Total:</span><span id="z-total">₹0</span></div></div><div class="z-pay-gateway"><div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--forest);margin-bottom:8px">Payment Gateway</div><label class="z-pay-option active" onclick="selectPay(this,'cod')"><input type="radio" name="payOpt" value="cod" checked> <span>💵 COD</span></label><label class="z-pay-option" onclick="selectPay(this,'online')"><input type="radio" name="payOpt" value="online"> <span>💳 Pay Online</span></label></div><button id="z-buy-now" disabled onclick="buyNowCart()" class="z-btn-buy" style="width:100%;min-height:48px;justify-content:center;margin-bottom:8px;font-size:14px">⚡ Buy Now — Pay Online</button><button id="z-checkout" disabled onclick="handleCheckout()" class="z-check">Proceed via WhatsApp →</button><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><a href="tel:+917240975556" class="z-btn-call" style="justify-content:center">📞 Call</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="z-btn-wa" style="justify-content:center">💬 WhatsApp</a></div></div></div></div>
 <div class="z-mobile-cart" id="z-mobile-cart"><div class="z-mobile-cart-inner"><div class="z-mobile-cart-info"><b><span id="z-mobile-count">0</span> items</b> <span style="display:block">Total: <b id="z-mobile-total">₹0</b></span></div><button class="btn btn-ghost btn-sm" style="border:1px solid var(--forest)" onclick="toggleZCart(true)">View Cart</button><button class="btn btn-primary btn-sm" onclick="buyNowCart()">Buy Now →</button></div></div>
-<script src="js/zofed-data.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/payment.js"></script>
-<script src="js/app.js"></script>
+<script src="js/zofed-data.js?v=036b886"></script>
+<script src="js/cart.js?v=036b886"></script>
+<script src="js/payment.js?v=036b886"></script>
+<script src="js/app.js?v=036b886"></script>
 <script>
 // Auto-enhance old product cards to have Add to Cart + Buy Now
 document.addEventListener('DOMContentLoaded', ()=>{
