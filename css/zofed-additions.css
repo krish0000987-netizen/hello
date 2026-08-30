@@ -175,9 +175,24 @@ img{ height:auto; max-width:100%; }
 *{ -webkit-tap-highlight-color:transparent; }
 button, a{ touch-action:manipulation; }
 input, select, textarea{ touch-action:manipulation; }
+/* — Fix header overlap seen on Android screenshot — */
+@media(max-width:720px){
+  .zofed-announce{ padding:8px 10px; gap:6px; }
+  .zofed-announce span{ line-height:1.4; }
+}
 /* Responsive - Ecom Optimized */
 @media(max-width:1024px){ .z-prod-grid{ grid-template-columns:repeat(3,1fr);} .z-recipe-grid{ grid-template-columns:repeat(3,1fr);} .z-cat-bar{ top:64px; } }
 @media(max-width:720px){
+  /* Header brand fix - prevent 3-line wrap seen in screenshot */
+  .brand-text span{ display:none; }
+  .brand-text strong{ font-size:17px; white-space:nowrap; }
+  .brand{ gap:8px; }
+  .header-inner{ height:auto; min-height:56px; padding:8px 0; }
+  .header-actions{ gap:6px; }
+  .header-actions .btn-whatsapp{ padding:8px 14px; font-size:12px; }
+  .zofed-cart-btn{ width:38px; height:38px; }
+  /* Cat bar - not sticky on mobile to avoid overlap with announcement */
+  .z-cat-bar{ position:static; top:auto; }
   .z-ident-grid{ grid-template-columns:1fr; gap:18px; }
   .z-aud-grid{ grid-template-columns:1fr; }
   .z-prod-grid{ grid-template-columns:1fr 1fr; gap:12px; }
@@ -198,8 +213,7 @@ input, select, textarea{ touch-action:manipulation; }
   .z-prod{ padding:12px; }
   .z-prod h3{ font-size:14px; }
   .z-r-img{ height:140px; }
-  .z-cat-bar{ top:64px; }
-  .z-cat-inner{ padding:8px 0; gap:8px; -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; }
+  .z-cat-inner{ padding:8px 12px; gap:8px; -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; margin:0 -12px; padding-inline:12px; }
   .z-cat-pill{ padding:7px 12px; font-size:12px; min-height:36px; scroll-snap-align:start; }
   .z-btn-cart, .z-btn-buy{ min-height:48px; font-size:14px; }
   .z-btn-call, .z-btn-wa{ min-height:48px; }

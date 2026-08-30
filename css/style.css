@@ -400,7 +400,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .container{ width:min(96vw, 100% - 24px); }
   .nav,.header-actions .btn-ghost,.header-actions .btn-primary{ display:none}
   .hamburger{display:grid; min-width:44px; min-height:44px; }
-  .header-inner{height:64px}
+  .header-inner{height:auto; min-height:56px; padding:8px 0; }
   .hero{ padding:14px 0 0; }
   .hero-grid{padding:14px;border-radius:22px; gap:16px}
   .hero-copy{padding:6px}
