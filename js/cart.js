@@ -4,8 +4,22 @@ function saveZCart(){ try{ localStorage.setItem('zofed_cart', JSON.stringify(win
 function toggleZCart(open){
   const d=document.getElementById('z-cart-drawer');
   if(!d) return;
-  if(open){ d.classList.add('open'); renderZCart(); document.body.style.overflow='hidden'; }
-  else { d.classList.remove('open'); document.body.style.overflow=''; }
+  if(open){
+    d.classList.add('open'); renderZCart();
+    document.body.style.overflow='hidden';
+    document.documentElement.style.overflow='hidden';
+    // hide mobile bars while drawer open
+    const mb=document.getElementById('z-mobile-cart'), ab=document.querySelector('.mobile-action-bar');
+    if(mb) mb.style.display='none';
+    if(ab) ab.style.display='none';
+  } else {
+    d.classList.remove('open');
+    document.body.style.overflow='';
+    document.documentElement.style.overflow='';
+    const mb=document.getElementById('z-mobile-cart'), ab=document.querySelector('.mobile-action-bar');
+    if(mb) mb.style.display='';
+    if(ab) ab.style.display='';
+  }
 }
 function addToZCart(name, price){
   const ex = window.zCart.find(i=>i.name===name);
