@@ -9,6 +9,26 @@
 <link rel="stylesheet" href="css/zofed-additions.css?v=indian50">
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' rx='12' fill='%239B1C1C'/%3E%3Ctext x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-weight='700' font-size='20' fill='white'%3EZ%3C/text%3E%3C/svg%3E">
+<style>
+/* 250g Master Gravy slider — combined images */
+.mg-single{max-width:560px;margin:0 auto}
+.mg-slider{position:relative;overflow:hidden;background:#f3ede3;height:420px;border-radius:16px 16px 0 0}
+.mg-slides{display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1);height:100%}
+.mg-slide{flex:0 0 100%;min-width:100%;height:100%;object-fit:cover;object-position:center;display:block;cursor:pointer}
+.mg-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:999px;border:1px solid rgba(0,0,0,.08);background:rgba(255,255,255,.92);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 16px rgba(0,0,0,.14);z-index:2;user-select:none}
+.mg-arrow.left{left:12px}
+.mg-arrow.right{right:12px}
+.mg-arrow:hover{background:white;transform:translateY(-50%) scale(1.05)}
+.mg-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:2;background:rgba(0,0,0,.18);padding:6px 10px;border-radius:999px;backdrop-filter:blur(6px)}
+.mg-dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.7);cursor:pointer;border:none;padding:0;transition:all .3s}
+.mg-dot.active{background:white;width:22px}
+.mg-counter{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.55);color:white;font-size:11px;font-weight:700;padding:5px 9px;border-radius:999px;z-index:2}
+@media(max-width:600px){.mg-slider{height:360px}.mg-single{max-width:100%}}
+/* modal slider */
+.mg-modal-slider{position:relative;overflow:hidden;background:#f3ede3;border-radius:12px;height:360px}
+.mg-modal-slides{display:flex;transition:transform .45s ease;height:100%}
+.mg-modal-slide{flex:0 0 100%;min-width:100%;height:100%;object-fit:cover}
+</style>
 </head>
 <body>
 <div class="zofed-announce">
@@ -46,7 +66,7 @@
 
 <section class="section" style="padding-top:18px">
   <div class="container">
-    <div id="store-grid" class="z-prod-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 860px; margin: 0 auto;"></div>
+    <div id="store-grid" class="z-prod-grid" style="display:block;max-width:560px;margin:0 auto;"></div>
     <div style="margin-top:22px;background:white;border:1px solid var(--line-2);border-radius:16px;padding:16px;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center;max-width:860px;margin-left:auto;margin-right:auto">
       <div style="font-size:13px;color:var(--muted)"><strong style="color:var(--ink)">250g Master Gravy</strong> — every pack makes 15+ curries. Check our 50 Recipe Hub for step-by-step.</div>
       <div style="display:flex;gap:8px"><a href="master-recipes.html" class="btn btn-ghost btn-sm">View 50 Recipes →</a><button class="btn btn-primary btn-sm" onclick="toggleZCart(true)">View Cart 🛒</button></div>
@@ -97,25 +117,41 @@
 <script src="js/payment.js?v=indian50"></script>
 <script src="js/app.js?v=indian50"></script>
 <script>
-// 250g Master Gravy — 2 images only (replaces 7-product grid)
-const MASTER_GRAVY_PRODUCTS = [
-  { id:'mg1', name:'Zofed 250g Master Gravy', desc:'Flagship multi-purpose 250g Master Gravy — one base for 15+ North Indian curries, restaurant taste in 10-15 mins.', price:199, mrp:249, badge:'250g • Master Gravy', weight:'250g', rating:4.8, reviews:1842, img:'assets/products/250g-master-gravy-1.jpeg', features:['One base = 15+ curries (Paneer, Dal, Veg, Chicken, Mutton)','100% Clean-label — Zero preservatives','Vacuum sealed • 12 months shelf life','FSSAI 11426045000358 — 10-15 min table-ready'], ingredients:'Tomato, Onion, Ginger-Garlic, Cashew, Regional spices, Refined oil', shelfLife:'12 months', storage:'Cool & dry, refrigerate after opening' },
-  { id:'mg2', name:'Zofed 250g Master Gravy', desc:'Same 250g Master Gravy — detail view. Authentic terracotta base, perfect for bulk cooking & meal prep.', price:199, mrp:249, badge:'250g • Master Gravy', weight:'250g', rating:4.8, reviews:1842, img:'assets/products/250g-master-gravy-2.jpeg', features:['Restaurant-style rich & velvety gravy','No chopping — just add paneer/veg & cook','Sirf 10 min me ready — serves 4-5','Zero synthetic color & preservatives'], ingredients:'Tomato, Onion, Ginger-Garlic, Cashew, Regional spices, Refined oil', shelfLife:'12 months', storage:'Cool & dry, refrigerate after opening' }
-];
+// 250g Master Gravy — single product, combined slider (2 images)
+const MASTER_GRAVY_PRODUCT = { id:'mg', name:'Zofed 250g Master Gravy', desc:'Flagship multi-purpose 250g Master Gravy — one base for 15+ North Indian curries, restaurant taste in 10-15 mins.', price:199, mrp:249, badge:'250g • Master Gravy', weight:'250g', rating:4.8, reviews:1842, images:['assets/products/250g-master-gravy-1.jpeg','assets/products/250g-master-gravy-2.jpeg'], img:'assets/products/250g-master-gravy-1.jpeg', features:['One base = 15+ curries (Paneer, Dal, Veg, Chicken, Mutton)','100% Clean-label — Zero preservatives','Vacuum sealed • 12 months shelf life','FSSAI 11426045000358 — 10-15 min table-ready','Restaurant-style rich & velvety gravy','Sirf 10 min me ready — serves 4-5'], ingredients:'Tomato, Onion, Ginger-Garlic, Cashew, Regional spices, Refined oil', shelfLife:'12 months', storage:'Cool & dry, refrigerate after opening' };
+const MASTER_GRAVY_PRODUCTS = [MASTER_GRAVY_PRODUCT];
 // Override global so cart/modal functions work
 window.ZOFED_PRODUCTS = MASTER_GRAVY_PRODUCTS;
 try{ ZOFED_PRODUCTS = MASTER_GRAVY_PRODUCTS; }catch(e){}
+let mgCur=0, mgModalCur=0;
+function mgUpdate(){ const t=document.getElementById('mg-slides'); const dots=document.querySelectorAll('.mg-dot'); const cnt=document.getElementById('mg-counter'); if(t) t.style.transform=`translateX(-${mgCur*100}%)`; dots.forEach((d,i)=>d.classList.toggle('active',i===mgCur)); if(cnt) cnt.textContent=`${mgCur+1} / 2`; }
+function mgNext(){ mgCur=(mgCur+1)%2; mgUpdate(); }
+function mgPrev(){ mgCur=(mgCur-1+2)%2; mgUpdate(); }
+function mgGo(i){ mgCur=i; mgUpdate(); }
+function mgModalUpdate(){ const t=document.getElementById('mg-modal-slides'); const dots=document.querySelectorAll('.mg-modal-dot'); if(t) t.style.transform=`translateX(-${mgModalCur*100}%)`; dots.forEach((d,i)=>d.classList.toggle('active',i===mgModalCur)); }
+function mgModalNext(){ mgModalCur=(mgModalCur+1)%2; mgModalUpdate(); }
+function mgModalPrev(){ mgModalCur=(mgModalCur-1+2)%2; mgModalUpdate(); }
+function mgModalGo(i){ mgModalCur=i; mgModalUpdate(); }
 
-function openProdModal(id){ const p=MASTER_GRAVY_PRODUCTS.find(x=>x.id===id); if(!p) return; document.getElementById('z-product-content').innerHTML=`<div class="z-modal-img"><img src="${p.img}" alt="${p.name}"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="z-prod-badge">${p.badge} • ${p.weight}</span><span style="font-size:12px;color:#B45309;font-weight:800">★ ${p.rating} (${p.reviews} reviews)</span></div><h3 style="font-size:20px;color:var(--forest)">${p.name}</h3><p style="font-size:13px;color:var(--muted);margin-top:6px;line-height:1.6">${p.desc}</p><div style="background:var(--cream-2);border:1px solid var(--line-2);border-radius:12px;padding:12px;margin-top:12px"><b style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--forest)">Product Details</b><ul style="margin-top:8px;display:grid;gap:6px;font-size:12px;color:#444">${p.features.map(f=>`<li>✓ ${f}</li>`).join('')}<li>✓ Ingredients: ${p.ingredients}</li><li>✓ Shelf life: ${p.shelfLife} • Storage: ${p.storage}</li></ul></div><div style="display:flex;align-items:center;gap:10px;margin-top:14px"><strong style="font-size:20px;color:var(--forest)">₹${p.price}</strong>${p.mrp>p.price?`<s style="color:var(--muted);font-size:13px">₹${p.mrp}</s><span style="background:#DCFCE7;color:#14532D;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:800">Save ₹${p.mrp-p.price}</span>`:''}<span style="margin-left:auto;font-size:11px;color:var(--muted)">250g • Free ship &gt;₹499</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px"><button class="z-btn-cart" onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price}); closeProdModal();">Add to Cart</button><button class="z-btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}',${p.price}); closeProdModal();">Buy Now</button></div><div class="z-quick-actions"><a href="tel:+917240975556" class="z-btn-call">📞 Call Now</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="z-btn-wa">💬 WhatsApp</a></div>`; document.getElementById('z-product-modal').classList.add('open'); }
+function openProdModal(id){ const p=MASTER_GRAVY_PRODUCT; document.getElementById('z-product-content').innerHTML=`<div class="mg-modal-slider"><div id="mg-modal-slides" class="mg-modal-slides"><img src="${p.images[0]}" alt="${p.name} 1" class="mg-modal-slide"><img src="${p.images[1]}" alt="${p.name} 2" class="mg-modal-slide"></div><button class="mg-arrow left" onclick="mgModalPrev()" aria-label="Previous">‹</button><button class="mg-arrow right" onclick="mgModalNext()" aria-label="Next">›</button><div class="mg-dots" style="bottom:12px"><button class="mg-dot mg-modal-dot active" onclick="mgModalGo(0)" aria-label="Image 1"></button><button class="mg-dot mg-modal-dot" onclick="mgModalGo(1)" aria-label="Image 2"></button></div></div><div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px"><span class="z-prod-badge">${p.badge} • ${p.weight}</span><span style="font-size:12px;color:#B45309;font-weight:800">★ ${p.rating} (${p.reviews} reviews)</span></div><h3 style="font-size:20px;color:var(--forest)">${p.name}</h3><p style="font-size:13px;color:var(--muted);margin-top:6px;line-height:1.6">${p.desc}</p><div style="background:var(--cream-2);border:1px solid var(--line-2);border-radius:12px;padding:12px;margin-top:12px"><b style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--forest)">Product Details</b><ul style="margin-top:8px;display:grid;gap:6px;font-size:12px;color:#444">${p.features.map(f=>`<li>✓ ${f}</li>`).join('')}<li>✓ Ingredients: ${p.ingredients}</li><li>✓ Shelf life: ${p.shelfLife} • Storage: ${p.storage}</li></ul></div><div style="display:flex;align-items:center;gap:10px;margin-top:14px"><strong style="font-size:20px;color:var(--forest)">₹${p.price}</strong>${p.mrp>p.price?`<s style="color:var(--muted);font-size:13px">₹${p.mrp}</s><span style="background:#DCFCE7;color:#14532D;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:800">Save ₹${p.mrp-p.price}</span>`:''}<span style="margin-left:auto;font-size:11px;color:var(--muted)">250g • Free ship &gt;₹499</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px"><button class="z-btn-cart" onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price}); closeProdModal();">Add to Cart</button><button class="z-btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}',${p.price}); closeProdModal();">Buy Now</button></div><div class="z-quick-actions"><a href="tel:+917240975556" class="z-btn-call">📞 Call Now</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="z-btn-wa">💬 WhatsApp</a></div>`; document.getElementById('z-product-modal').classList.add('open'); setTimeout(()=>{ mgModalCur=mgCur; mgModalUpdate(); }, 30); }
 function closeProdModal(){ document.getElementById('z-product-modal').classList.remove('open'); }
-function renderStore(){ const g=document.getElementById('store-grid'); if(!g) return; g.innerHTML=MASTER_GRAVY_PRODUCTS.map(p=>`
-  <div class="z-prod" style="padding:0;overflow:hidden">
-    <div style="height:320px;overflow:hidden;background:#f3ede3;cursor:pointer" onclick="openProdModal('${p.id}')"><img src="${p.img}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center"></div>
-    <div style="padding:14px;display:flex;flex-direction:column;flex:1">
+function renderStore(){ const g=document.getElementById('store-grid'); const p=MASTER_GRAVY_PRODUCT; if(!g) return; g.innerHTML=`
+  <div class="z-prod mg-single" style="padding:0;overflow:hidden">
+    <div class="mg-slider" id="mg-slider">
+      <div id="mg-slides" class="mg-slides">
+        <img src="${p.images[0]}" alt="${p.name} front" class="mg-slide" onclick="openProdModal('${p.id}')" loading="eager">
+        <img src="${p.images[1]}" alt="${p.name} detail" class="mg-slide" onclick="openProdModal('${p.id}')" loading="lazy">
+      </div>
+      <button class="mg-arrow left" onclick="mgPrev()" aria-label="Previous image">‹</button>
+      <button class="mg-arrow right" onclick="mgNext()" aria-label="Next image">›</button>
+      <div class="mg-dots"><button class="mg-dot active" onclick="mgGo(0)" aria-label="Go to image 1"></button><button class="mg-dot" onclick="mgGo(1)" aria-label="Go to image 2"></button></div>
+      <span id="mg-counter" class="mg-counter">1 / 2</span>
+    </div>
+    <div style="padding:16px;display:flex;flex-direction:column;flex:1">
       <div style="display:flex;justify-content:space-between;align-items:center"><span class="z-prod-badge">${p.badge}</span><span style="font-size:11px;color:#B45309;font-weight:800">★ ${p.rating} (${p.reviews})</span></div>
       <h3 style="cursor:pointer;margin-top:8px" onclick="openProdModal('${p.id}')">${p.name}</h3>
       <p style="font-size:13px;color:var(--muted);line-height:1.6">${p.desc}</p>
-      <div style="background:rgba(45,79,56,.06);border:1px solid var(--line-2);border-radius:10px;padding:10px;margin-top:8px">
+      <div style="background:rgba(45,79,56,.06);border:1px solid var(--line-2);border-radius:10px;padding:11px;margin-top:10px">
         <b style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--forest)">Details — Dekh kar Add to Cart karein</b>
         <ul style="margin-top:6px;display:grid;gap:4px;font-size:11.5px;color:#444;line-height:1.5">
           ${p.features.slice(0,3).map(f=>`<li>✓ ${f}</li>`).join('')}
@@ -123,9 +159,16 @@ function renderStore(){ const g=document.getElementById('store-grid'); if(!g) re
         </ul>
         <div style="font-size:11px;color:var(--muted);margin-top:6px"><b>Ingredients:</b> ${p.ingredients}</div>
       </div>
-      <div class="z-prod-foot"><div class="z-prod-price"><div><strong>₹${p.price}</strong> ${p.mrp>p.price?`<s style="color:var(--muted);font-size:11px;margin-left:6px">₹${p.mrp}</s>`:''}</div><span style="font-size:11px;background:#FEF3C7;padding:4px 8px;border-radius:999px;font-weight:700">${p.weight} • Free ship &gt;₹499</span></div><div class="z-prod-actions"><button class="z-btn-cart" onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price})">Add to Cart</button><button class="z-btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}',${p.price})">Buy Now</button></div><div class="z-quick-actions"><a href="tel:+917240975556" class="z-btn-call">📞 Call</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="z-btn-wa">💬 WhatsApp</a></div><a onclick="openProdModal('${p.id}')" style="text-align:center;font-size:11px;color:var(--forest);font-weight:800;cursor:pointer;margin-top:4px;text-decoration:underline">View Full Details →</a></div>
+      <div class="z-prod-foot"><div class="z-prod-price"><div><strong>₹${p.price}</strong> ${p.mrp>p.price?`<s style="color:var(--muted);font-size:11px;margin-left:6px">₹${p.mrp}</s>`:''} <span style="background:#DCFCE7;color:#14532D;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:800">Save ₹${p.mrp-p.price}</span></div><span style="font-size:11px;background:#FEF3C7;padding:4px 8px;border-radius:999px;font-weight:700">${p.weight} • Free ship &gt;₹499</span></div><div class="z-prod-actions"><button class="z-btn-cart" onclick="addToZCart('${p.name.replace(/'/g,"\\'")}',${p.price})">Add to Cart</button><button class="z-btn-buy" onclick="buyNow('${p.name.replace(/'/g,"\\'")}',${p.price})">Buy Now</button></div><div class="z-quick-actions"><a href="tel:+917240975556" class="z-btn-call">📞 Call</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="z-btn-wa">💬 WhatsApp</a></div><a onclick="openProdModal('${p.id}')" style="text-align:center;font-size:11px;color:var(--forest);font-weight:800;cursor:pointer;margin-top:6px;text-decoration:underline">View Full Details →</a></div>
     </div>
-  </div>`).join(''); }
+  </div>`; 
+  // swipe support
+  setTimeout(()=>{
+    const s=document.getElementById('mg-slider'); if(!s) return; let sx=0; s.addEventListener('touchstart', e=>{ sx=e.touches[0].clientX; }, {passive:true}); s.addEventListener('touchend', e=>{ const dx=e.changedTouches[0].clientX - sx; if(Math.abs(dx)>40) { if(dx<0) mgNext(); else mgPrev(); } });
+    // keyboard arrows when focused
+    document.addEventListener('keydown', e=>{ if(document.getElementById('z-product-modal').classList.contains('open')){ if(e.key==='ArrowLeft') mgModalPrev(); if(e.key==='ArrowRight') mgModalNext(); } else { if(e.key==='ArrowLeft') mgPrev(); if(e.key==='ArrowRight') mgNext(); } });
+  }, 100);
+}
 document.addEventListener('DOMContentLoaded', ()=>{ if(typeof updBadge==='function') updBadge(); if(typeof updateMobileCart==='function') updateMobileCart(); renderStore(); });
 </script>
 </body>
