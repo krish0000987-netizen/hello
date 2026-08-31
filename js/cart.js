@@ -127,7 +127,7 @@ function checkoutZ(){
   if(window.zCart.length===0){ alert('Your cart is empty. Add a product first.'); return; }
   const fee=sub>=499?0:50, shipLabel=fee===0?'FREE (Unlocked above ₹499)':'₹50', total=sub+fee, ref='ZF-'+Math.floor(100000+Math.random()*900000);
   const msg=`*NEW ORDER REQUEST - ZOFED FOODS*\n*Order Ref:* #${ref}\n\n*ORDER ITEMS:*\n${lines}\n*PAYMENT SUMMARY:*\n• *Item Subtotal:* ₹${sub}\n• *Delivery Fee:* ${shipLabel}\n• *Total Amount Payable:* ₹${total}\n\n*DELIVERY DETAILS:*\n• *Customer Name:* ${name}\n• *Phone:* ${phone}\n• *Address:* ${addr}\n• *City:* ${city}\n• *Pincode:* ${pin}\n• *Payment:* ${pay}\n\n_Please confirm availability and share payment details._`;
-  window.open(`https://wa.me/message/K53GKHKZ3VELK1?text=${encodeURIComponent(msg)}`,'_blank');
+  window.open(`https://wa.me/917240975556?text=${encodeURIComponent(msg)}`,'_blank');
 }
 function showToast(msg){
   let t=document.getElementById('z-toast');

@@ -65,7 +65,7 @@ function initiatePayment(method){
       handler: function(resp){
         const cart = window.zCart||[];
         const msg = `*PAYMENT SUCCESS - ZOFED FOODS*\n*Payment ID:* ${resp.razorpay_payment_id}\n*Amount Paid:* ₹${total}\n*Items:* ${cart.map(i=> `${i.name} x${i.qty}`).join(', ')}\n*Customer:* ${nameEl? nameEl.value : ''} - ${phoneEl? phoneEl.value : ''}`;
-        window.open(`https://wa.me/message/K53GKHKZ3VELK1?text=${encodeURIComponent(msg)}`,'_blank');
+        window.open(`https://wa.me/917240975556?text=${encodeURIComponent(msg)}`,'_blank');
         // Optionally clear cart & show thank you
         alert('Payment successful! Payment ID: ' + resp.razorpay_payment_id + '\nWe have opened WhatsApp for order confirmation.');
       },
