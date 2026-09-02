@@ -31,28 +31,28 @@
     </div>
   </div>
 </header>
-<div class="drawer" id="drawer"><div class="drawer-backdrop"></div><div class="drawer-panel"><div class="drawer-head"><div class="brand"><div class="brand-mark">Z</div><div class="brand-text"><strong>Zofed Foods</strong><span>Ready to Cook</span></div></div><button id="drawerClose" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:white;cursor:pointer">✕</button></div><nav class="drawer-nav"><a href="index.html">Home <span>→</span></a><a href="store.html">ZOFED Ready to Cook Master Gravies <span>→</span></a><a href="master-recipes.html" class="active">50 Recipe Hub <span>→</span></a><a href="products.html">Products <span>→</span></a><a href="recipes.html">Recipes <span>→</span></a><a href="contact.html">Contact <span>→</span></a></nav><div class="drawer-cta"><a href="tel:+917240975556" class="btn btn-primary">Call: 72409 75556</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="btn btn-whatsapp">WhatsApp Chat</a></div></div></div>
+<div class="drawer" id="drawer"><div class="drawer-backdrop"></div><div class="drawer-panel"><div class="drawer-head"><div class="brand"><div class="brand-mark">Z</div><div class="brand-text"><strong>Zofed Foods</strong><span>Ready to Cook</span></div></div><button id="drawerClose" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:white;cursor:pointer">✕</button></div><nav class="drawer-nav"><a href="index.html">Home <span>→</span></a><a href="store.html">ZOFED Ready to Cook Master Gravies <span>→</span></a><a href="master-recipes.html" class="active">50 Recipe Hub <span>→</span></a><a href="products.html">Products <span>→</span></a><a href="contact.html">Contact <span>→</span></a></nav><div class="drawer-cta"><a href="tel:+917240975556" class="btn btn-primary">Call: 72409 75556</a><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" class="btn btn-whatsapp">WhatsApp Chat</a></div></div></div>
 <div class="z-cat-bar"><div class="container z-cat-inner"><a class="z-cat-pill" href="store.html">🛒 ZOFED Ready to Cook Master Gravies</a><button class="z-cat-pill active" onclick="filterRecipes('all')">All 50</button><button class="z-cat-pill" onclick="filterRecipes('paneer')">Paneer</button><button class="z-cat-pill" onclick="filterRecipes('nonveg')">Non-Veg</button><button class="z-cat-pill" onclick="filterRecipes('veg')">Veg</button><button class="z-cat-pill" onclick="filterRecipes('biryani')">Biryani</button></div></div>
 
 <main>
 <section class="page-hero">
   <div class="container" style="text-align:center">
     <div class="breadcrumb" style="justify-content:center"><a href="index.html">Home</a><span>/</span><span>50 Recipe Hub</span></div>
-    <div class="eyebrow" style="justify-content:center">Interactive Master E-Book (All 50 Recipes)</div>
-    <h1>Culinary Master Recipe Hub.</h1>
-    <p style="margin:10px auto 0;max-width:640px">Click any dish card to view step-by-step master instructions, authentic ingredients & chef secrets. Every recipe is <b>table-ready in 10–15 mins</b> with a 250gm Zofed base. Free shipping above ₹499.</p>
+    <div class="eyebrow" style="justify-content:center">Official 50-Recipe Master Book • Indian Classics</div>
+    <h1>Master Recipe Hub<br><span style="color:var(--terracotta);font-size:clamp(24px,3.5vw,36px)">50 Iconic Restaurant & Regional Dishes</span></h1>
+    <p style="max-width:680px;margin:12px auto 0">Click on any dish card to reveal the <b>Master Formula</b>, exact ingredient ratios, step-by-step Hindi cooking matrix, and Chef's secrets — all cooked in <b>under 10-15 minutes</b> using 250g Master Gravy.</p>
   </div>
 </section>
 
-<section class="section" style="padding-top:18px">
+<section class="section" style="padding-top:20px">
   <div class="container">
     <div class="z-search"><span>⌕</span><input id="recipeSearch" type="search" placeholder="Search 50 recipes — e.g. Paneer Butter Masala, Biryani, Korma..."><button id="clearSearch" style="display:none;border:1px solid var(--line);background:white;width:28px;height:28px;border-radius:50%;cursor:pointer">✕</button></div>
     <div class="z-filters" id="recipe-filters">
       <button onclick="filterRecipes('all')" class="z-filter active" data-cat="all">All 50 Recipes</button>
-      <button onclick="filterRecipes('paneer')" class="z-filter" data-cat="paneer">Paneer & Kofta</button>
-      <button onclick="filterRecipes('nonveg')" class="z-filter" data-cat="nonveg">Mutton, Chicken & Eggs</button>
-      <button onclick="filterRecipes('veg')" class="z-filter" data-cat="veg">Veg, Dal & Dhaba</button>
-      <button onclick="filterRecipes('biryani')" class="z-filter" data-cat="biryani">Biryani & Rice</button>
+      <button onclick="filterRecipes('paneer')" class="z-filter" data-cat="paneer">👑 Paneer & Kofta (10)</button>
+      <button onclick="filterRecipes('nonveg')" class="z-filter" data-cat="nonveg">🍗 Mutton, Chicken & Eggs (14)</button>
+      <button onclick="filterRecipes('veg')" class="z-filter" data-cat="veg">🥘 Veg, Dal & Dhaba (16)</button>
+      <button onclick="filterRecipes('biryani')" class="z-filter" data-cat="biryani">🍚 Biryani, Rice & Pulao (10)</button>
     </div>
     <div class="z-recipe-grid" id="recipe-grid"></div>
     <div id="no-results" style="display:none;text-align:center;padding:32px;background:white;border:1px dashed var(--line);border-radius:16px;margin-top:18px"><h3 style="color:var(--forest)">No recipes found</h3><p style="color:var(--muted);font-size:13px;margin-top:6px">Try a different search or filter.</p></div>
@@ -64,7 +64,7 @@
 </section>
 </main>
 
-<footer class="footer"><div class="container"><div class="footer-top"><div class="footer-brand"><div class="brand"><div class="brand-mark">Z</div><div class="brand-text"><strong style="color:white">Zofed Foods</strong><span style="color:rgba(255,255,255,0.6)">Ready to Cook</span></div></div><p>50 authentic recipes, 7 premium 250gm bases, 10–15 min table-ready. FSSAI 11426045000358.</p></div><div><h4>Quick Links</h4><div class="footer-links"><a href="index.html">Home</a><a href="store.html">ZOFED Ready to Cook Master Gravies</a><a href="master-recipes.html">50 Recipes</a></div></div><div><h4>Explore</h4><div class="footer-links"><a href="recipes.html">Recipes</a><a href="quality.html">Quality</a><a href="contact.html">Contact</a></div></div><div><h4>Contact</h4><div class="footer-contact"><div>📍 Nasheman 12, Shahjahanabad, Bhopal, MP</div><div>📞 7240975556</div><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" style="color:var(--gold-light);font-weight:700">Direct WhatsApp Chat →</a></div></div></div><div class="footer-bottom"><span>© 2026 Zofed Foods. Master Book Integrated.</span><span>Bhopal, MP</span></div></div></footer>
+<footer class="footer"><div class="container"><div class="footer-top"><div class="footer-brand"><div class="brand"><div class="brand-mark">Z</div><div class="brand-text"><strong style="color:white">Zofed Foods</strong><span style="color:rgba(255,255,255,0.6)">Ready to Cook</span></div></div><p>50 authentic recipes, 7 premium 250gm bases, 10–15 min table-ready. FSSAI 11426045000358.</p></div><div><h4>Quick Links</h4><div class="footer-links"><a href="index.html">Home</a><a href="store.html">ZOFED Ready to Cook Master Gravies</a><a href="master-recipes.html">50 Recipes</a><a href="products.html">Products</a></div></div><div><h4>Explore</h4><div class="footer-links"><a href="master-recipes.html">50 Recipe Hub</a><a href="quality.html">Quality</a><a href="contact.html">Contact</a></div></div><div><h4>Contact</h4><div class="footer-contact"><div>📍 Nasheman 12, Shahjahanabad, Bhopal, MP</div><div>📞 7240975556</div><a href="https://wa.me/message/K53GKHKZ3VELK1" target="_blank" style="color:var(--gold-light);font-weight:700">Direct WhatsApp Chat →</a></div></div></div><div class="footer-bottom"><span>© 2026 Zofed Foods. Master Book Integrated.</span><span>Bhopal, MP</span></div></div></footer>
 
 <!-- Cart Drawer -->
 <div id="z-cart-drawer" class="z-drawer" aria-hidden="true">
@@ -106,7 +106,7 @@
   </div>
 </div>
 
-<script src="js/zofed-data.js?v=indian50"></script>
+<script src="js/zofed-data.js?v=halwa2"></script>
 <script src="js/cart.js?v=indian50"></script>
 <script src="js/payment.js?v=indian50"></script>
 <script src="js/app.js?v=indian50"></script>
