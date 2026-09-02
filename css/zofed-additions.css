@@ -152,18 +152,7 @@
 .z-pay-option input{ accent-color:var(--forest); }
 .z-pay-note{ font-size:11px; color:var(--muted); background:var(--cream-2); padding:10px 12px; border-radius:10px; margin-top:8px; line-height:1.6; }
 
-/* — Sticky Mobile Cart Bar — */
-.z-mobile-cart{ display:none; position:fixed; bottom:0; left:0; right:0; z-index:48; background:white; border-top:1px solid var(--line); padding:10px 12px calc(10px + env(safe-area-inset-bottom)); box-shadow:0 -8px 30px rgba(0,0,0,.08); padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px)); }
-.z-mobile-cart-inner{ display:flex; gap:10px; }
-.z-mobile-cart-info{ flex:1; }
-.z-mobile-cart-info b{ font-size:13px; color:var(--forest); }
-.z-mobile-cart-info span{ font-size:11px; color:var(--muted); }
 
-/* — Hide mobile bars when cart/drawer open — */
-.z-drawer.open ~ .z-mobile-cart,
-.z-drawer.open ~ .mobile-action-bar,
-.drawer.open ~ .z-mobile-cart,
-.drawer.open ~ .mobile-action-bar{ display:none !important; }
 
 /* — Smooth scrolling + mobile friendly foundation — */
 html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; -webkit-tap-highlight-color:transparent; }
@@ -198,8 +187,7 @@ input, select, textarea{ touch-action:manipulation; }
   .z-prod-grid{ grid-template-columns:1fr 1fr; gap:12px; }
   .z-recipe-grid{ grid-template-columns:1fr 1fr; gap:12px; }
   .z-ident, .z-store, .z-hub{ padding:40px 0; }
-  .z-mobile-cart{ display:block; }
-  body{ padding-bottom:84px; }
+
   .z-filters{ overflow-x:auto; flex-wrap:nowrap; padding-bottom:6px; scrollbar-width:none; -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; }
   .z-filters::-webkit-scrollbar{ display:none; }
   .z-filter{ flex:0 0 auto; min-height:44px; scroll-snap-align:start; }

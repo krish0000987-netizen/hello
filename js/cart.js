@@ -15,9 +15,7 @@ function toggleZCart(open){
       // prevent touchmove on body, allow on drawer
       document.body.style.touchAction='none';
     }catch(e){}
-    const mb=document.getElementById('z-mobile-cart'), ab=document.querySelector('.mobile-action-bar');
-    if(mb) mb.style.display='none';
-    if(ab) ab.style.display='none';
+
   } else {
     d.classList.remove('open');
     try{
@@ -25,9 +23,7 @@ function toggleZCart(open){
       document.documentElement.style.overflow='';
       document.body.style.touchAction='';
     }catch(e){}
-    const mb=document.getElementById('z-mobile-cart'), ab=document.querySelector('.mobile-action-bar');
-    if(mb) mb.style.display='';
-    if(ab) ab.style.display='';
+
   }
 }
 function addToZCart(name, price){
@@ -48,14 +44,7 @@ function updQty(idx, delta){
   if(window.zCart[idx].qty <= 0) window.zCart.splice(idx,1);
   saveZCart(); updBadge(); updateMobileCart(); renderZCart();
 }
-function updateMobileCart(){
-  const el=document.getElementById('z-mobile-count'), tot=document.getElementById('z-mobile-total');
-  const s=window.zCart.reduce((a,b)=>a+b.qty,0);
-  const sub=window.zCart.reduce((a,b)=>a+b.price*b.qty,0);
-  const total = sub===0?0: (sub>=499?sub:sub+50);
-  if(el) el.textContent=s;
-  if(tot) tot.textContent='₹'+total;
-}
+function updateMobileCart(){}
 function renderZCart(){
   const list=document.getElementById('z-cart-items'), subEl=document.getElementById('z-sub'), shipEl=document.getElementById('z-ship-fee'), totEl=document.getElementById('z-total'), fill=document.getElementById('z-ship-fill'), txt=document.getElementById('z-ship-text'), btn=document.getElementById('z-checkout'), buyBtn=document.getElementById('z-buy-now'), form=document.getElementById('z-form-section');
   if(!list) return;
